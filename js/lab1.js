@@ -185,5 +185,7 @@ function handleSnap() {
     updateExperiment();
 }
 
-   
+slider.addEventListener("change", handleSnap);
+
+initLab1();   
 }
