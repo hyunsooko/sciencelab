@@ -1,3 +1,1 @@
-updateStar();
-
-slider.addEventListener("input",updateStar);
+// app.js
