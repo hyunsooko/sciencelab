@@ -1,0 +1,1 @@
+const STAR_DATA=[...];
