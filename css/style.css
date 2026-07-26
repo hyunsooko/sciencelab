@@ -15,7 +15,8 @@ body{
     "Noto Sans KR",
     sans-serif;
 
-    background:#08101d;
+   
+    background:red !important;
     color:#ffffff;
     line-height:1.7;
 
