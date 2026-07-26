@@ -1,1 +1,1 @@
-const STAR_DATA=[...];
+// data.js
