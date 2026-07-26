@@ -1,6 +1,6 @@
-/* ==========================
-   기본 설정
-========================== */
+/* ===================================
+   RESET
+=================================== */
 
 *{
     margin:0;
@@ -15,68 +15,73 @@ body{
     "Noto Sans KR",
     sans-serif;
 
-    color:white;
-
+    background:#08101d;
+    color:#ffffff;
     line-height:1.7;
 
-    background-color:#08101d;
-
+    /* 은은한 별 */
     background-image:
-    radial-gradient(rgba(255,255,255,.45) 1px, transparent 1px),
-    radial-gradient(rgba(255,255,255,.18) 1px, transparent 1px);
+    radial-gradient(circle at 20% 20%, rgba(255,255,255,.6) 1px, transparent 1px),
+    radial-gradient(circle at 80% 40%, rgba(255,255,255,.45) 1px, transparent 1px),
+    radial-gradient(circle at 30% 70%, rgba(255,255,255,.35) 1px, transparent 1px),
+    radial-gradient(circle at 70% 90%, rgba(255,255,255,.55) 1px, transparent 1px);
 
     background-size:
-    180px 180px,
-    320px 320px;
-
-    background-position:
-    0 0,
-    90px 140px;
+    260px 260px,
+    340px 340px,
+    420px 420px,
+    520px 520px;
 
 }
 
 
-/* ==========================
-   Hero
-========================== */
+/* ===================================
+   HERO
+=================================== */
 
 .hero{
 
-    text-align:center;
-
     padding:70px 20px 55px;
+
+    text-align:center;
 
     background:
     radial-gradient(circle at top,
-    #294676 0%,
-    #162440 40%,
+    #2c4879 0%,
+    #162542 45%,
     #08101d 100%);
+
+}
+
+.hero-content{
+
+    max-width:700px;
+
+    margin:auto;
 
 }
 
 .planet{
 
-    font-size:68px;
+    font-size:70px;
 
-    margin-bottom:18px;
+    margin-bottom:20px;
 
 }
 
 .subtitle{
 
-    color:#8cb9ff;
+    color:#90b8ff;
 
     font-weight:600;
 
-    letter-spacing:1px;
-
-    margin-bottom:10px;
+    margin-bottom:8px;
 
 }
 
 .hero h1{
 
-    font-size:3rem;
+    font-size:3.2rem;
 
     margin-bottom:10px;
 
@@ -84,29 +89,23 @@ body{
 
 .english{
 
-    color:#9bb7d8;
+    color:#a8c3e8;
 
-    margin-bottom:25px;
-
-    font-size:1.05rem;
+    margin-bottom:24px;
 
 }
 
 .description{
 
-    color:#d3deef;
-
-    max-width:620px;
-
-    margin:auto;
+    color:#d4ddeb;
 
 }
 
 .status{
 
-    display:inline-block;
+    margin-top:30px;
 
-    margin-top:32px;
+    display:inline-block;
 
     padding:10px 22px;
 
@@ -114,18 +113,20 @@ body{
 
     background:rgba(255,255,255,.08);
 
+    border:1px solid rgba(255,255,255,.08);
+
 }
 
 
-/* ==========================
-   Container
-========================== */
+/* ===================================
+   CONTAINER
+=================================== */
 
 .container{
 
     width:min(1100px,92%);
 
-    margin:65px auto;
+    margin:70px auto;
 
 }
 
@@ -133,38 +134,38 @@ body{
 
     text-align:center;
 
-    margin-bottom:35px;
-
     font-size:2rem;
+
+    margin-bottom:40px;
 
 }
 
 
-/* ==========================
-   Card Grid
-========================== */
+/* ===================================
+   GRID
+=================================== */
 
 .lab-grid{
 
     display:grid;
 
     grid-template-columns:
-    repeat(auto-fit,minmax(260px,300px));
+    repeat(auto-fit,minmax(270px,310px));
 
     justify-content:center;
 
-    gap:24px;
+    gap:26px;
 
 }
 
 
-/* ==========================
-   Card
-========================== */
+/* ===================================
+   CARD
+=================================== */
 
 .lab-card{
 
-    background:#1b2744;
+    background:#1a2743;
 
     border-radius:22px;
 
@@ -172,7 +173,7 @@ body{
 
     border:1px solid rgba(255,255,255,.08);
 
-    transition:.28s;
+    transition:.25s;
 
 }
 
@@ -183,14 +184,14 @@ body{
     border-color:#5b93ff;
 
     box-shadow:
-    0 0 24px rgba(91,147,255,.18);
+    0 12px 30px rgba(0,0,0,.35);
 
 }
 
 
-/* ==========================
-   Icon
-========================== */
+/* ===================================
+   ICON
+=================================== */
 
 .icon{
 
@@ -198,7 +199,9 @@ body{
 
     height:72px;
 
-    margin:0 auto 22px;
+    margin:0 auto 24px;
+
+    border-radius:50%;
 
     display:flex;
 
@@ -208,13 +211,27 @@ body{
 
     font-size:38px;
 
-    border-radius:50%;
-
-    background:rgba(255,255,255,.05);
-
-    border:1px solid rgba(255,255,255,.08);
-
     transition:.25s;
+
+}
+
+/* 카드별 색 */
+
+.temperature{
+
+    background:#3d2b20;
+
+}
+
+.magnitude{
+
+    background:#40371d;
+
+}
+
+.parallax{
+
+    background:#20364c;
 
 }
 
@@ -222,20 +239,18 @@ body{
 
     transform:scale(1.08);
 
-    background:rgba(91,147,255,.12);
-
 }
 
 
-/* ==========================
-   Text
-========================== */
+/* ===================================
+   TEXT
+=================================== */
 
 .lab-card h3{
 
     text-align:center;
 
-    font-size:1.75rem;
+    font-size:1.8rem;
 
     margin-bottom:12px;
 
@@ -245,16 +260,16 @@ body{
 
     text-align:center;
 
-    color:#d2d8e5;
+    color:#d0d7e6;
 
-    min-height:55px;
+    min-height:60px;
 
 }
 
 
-/* ==========================
-   Info
-========================== */
+/* ===================================
+   INFO
+=================================== */
 
 .info{
 
@@ -264,18 +279,20 @@ body{
 
     gap:18px;
 
-    margin:20px 0;
+    flex-wrap:wrap;
 
-    color:#9cb4d8;
+    margin:22px 0;
 
-    font-size:.92rem;
+    color:#9fb8db;
+
+    font-size:.9rem;
 
 }
 
 
-/* ==========================
-   Tags
-========================== */
+/* ===================================
+   TAG
+=================================== */
 
 .tags{
 
@@ -283,17 +300,17 @@ body{
 
     justify-content:center;
 
-    flex-wrap:wrap;
-
     gap:8px;
 
-    margin-bottom:22px;
+    flex-wrap:wrap;
+
+    margin-bottom:24px;
 
 }
 
 .tags span{
 
-    background:#27395d;
+    background:#2a3d62;
 
     padding:5px 12px;
 
@@ -304,15 +321,13 @@ body{
 }
 
 
-/* ==========================
-   Button
-========================== */
+/* ===================================
+   BUTTON
+=================================== */
 
 .btn{
 
     display:block;
-
-    width:100%;
 
     text-align:center;
 
@@ -320,13 +335,13 @@ body{
 
     padding:14px;
 
+    border-radius:14px;
+
     background:#5f84f4;
 
     color:white;
 
     font-weight:700;
-
-    border-radius:14px;
 
     transition:.25s;
 
@@ -334,53 +349,57 @@ body{
 
 .btn:hover{
 
-    background:#7d9dff;
+    background:#7b9dff;
 
 }
 
 
-/* ==========================
-   Footer
-========================== */
+/* ===================================
+   FOOTER
+=================================== */
 
 footer{
 
     margin-top:80px;
 
-    padding:40px;
-
-    border-top:1px solid rgba(255,255,255,.08);
+    padding:45px;
 
     text-align:center;
 
-    color:#adb6c7;
+    color:#aeb8c9;
+
+    border-top:1px solid rgba(255,255,255,.08);
 
 }
 
 footer p{
 
-    margin:6px;
+    margin:5px 0;
 
 }
 
 
-/* ==========================
-   Mobile
-========================== */
+/* ===================================
+   MOBILE
+=================================== */
 
-@media(max-width:768px){
+@media (max-width:768px){
 
 .hero h1{
 
-    font-size:2.2rem;
+    font-size:2.4rem;
 
 }
 
-.info{
+.planet{
 
-    flex-direction:column;
+    font-size:56px;
 
-    gap:6px;
+}
+
+.container{
+
+    margin:50px auto;
 
 }
 
