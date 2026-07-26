@@ -475,3 +475,366 @@ footer p{
 }
 
 }
+
+/* ======================================
+   LAB 1 : 별의 온도와 색깔
+====================================== */
+
+.lab-section{
+    max-width:1200px;
+    margin:80px auto;
+    padding:0 24px;
+}
+
+.lab-title{
+    font-size:2rem;
+    font-weight:700;
+    color:#1f2937;
+    margin-bottom:12px;
+}
+
+.lab-subtitle{
+    color:#64748b;
+    margin-bottom:40px;
+    line-height:1.7;
+}
+
+.lab-grid{
+
+    display:grid;
+
+    grid-template-columns:380px 1fr;
+
+    gap:32px;
+
+    align-items:stretch;
+
+}
+
+/* -----------------------
+   카드 공통
+------------------------ */
+
+.control-card,
+.viewer-card,
+.temperature-table,
+.discovery-card{
+
+    background:white;
+
+    border-radius:20px;
+
+    padding:28px;
+
+    box-shadow:0 12px 30px rgba(0,0,0,.08);
+
+}
+
+/* -----------------------
+   왼쪽 카드
+------------------------ */
+
+.control-card h3{
+
+    margin-bottom:18px;
+
+}
+
+.temperature-value{
+
+    font-size:42px;
+
+    font-weight:800;
+
+    color:#4F7BFF;
+
+    margin-bottom:24px;
+
+}
+
+#temperatureSlider{
+
+    width:100%;
+
+    margin-bottom:30px;
+
+    cursor:pointer;
+
+}
+
+/* -----------------------
+   정보 카드
+------------------------ */
+
+.star-info{
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:18px;
+
+}
+
+.info-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:14px 18px;
+
+    border-radius:12px;
+
+    background:#f8fafc;
+
+}
+
+.info-item span{
+
+    color:#64748b;
+
+}
+
+.info-item strong{
+
+    font-size:18px;
+
+}
+
+/* -----------------------
+   오른쪽
+------------------------ */
+
+.viewer-card{
+
+    display:flex;
+
+    flex-direction:column;
+
+    justify-content:center;
+
+    align-items:center;
+
+    text-align:center;
+
+}
+
+/* 별 */
+
+.star-wrapper{
+
+    position:relative;
+
+    width:220px;
+
+    height:220px;
+
+    margin-bottom:24px;
+
+}
+
+.star-glow{
+
+    position:absolute;
+
+    inset:0;
+
+    border-radius:50%;
+
+    filter:blur(35px);
+
+    opacity:.7;
+
+    transition:.35s;
+
+}
+
+.star{
+
+    position:absolute;
+
+    left:50%;
+
+    top:50%;
+
+    transform:translate(-50%,-50%);
+
+    width:120px;
+
+    height:120px;
+
+    border-radius:50%;
+
+    background:#FFD54F;
+
+    box-shadow:0 0 80px rgba(255,213,79,.5);
+
+    transition:
+    background .4s,
+    box-shadow .4s,
+    transform .3s;
+
+}
+
+/* -----------------------
+   스펙트럼
+------------------------ */
+
+.spectral-text{
+
+    margin-top:12px;
+
+    letter-spacing:4px;
+
+    font-size:12px;
+
+    color:#94a3b8;
+
+}
+
+.spectral-type{
+
+    font-size:48px;
+
+    font-weight:700;
+
+    color:#4F7BFF;
+
+    margin:8px 0;
+
+}
+
+#starDisplayName{
+
+    margin-top:10px;
+
+}
+
+#starDescription{
+
+    max-width:420px;
+
+    color:#64748b;
+
+    line-height:1.8;
+
+}
+
+/* -----------------------
+   표
+------------------------ */
+
+.temperature-table{
+
+    margin-top:36px;
+
+}
+
+.temperature-table table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+.temperature-table th{
+
+    background:#4F7BFF;
+
+    color:white;
+
+    padding:14px;
+
+}
+
+.temperature-table td{
+
+    padding:14px;
+
+    text-align:center;
+
+    border-bottom:1px solid #e2e8f0;
+
+}
+
+.temperature-table tbody tr{
+
+    transition:.3s;
+
+}
+
+/* JS가 active 붙임 */
+
+.temperature-table tbody tr.active{
+
+    background:#eef4ff;
+
+    border-left:6px solid #4F7BFF;
+
+    transform:scale(1.01);
+
+}
+
+/* -----------------------
+   발견 카드
+------------------------ */
+
+.discovery-card{
+
+    margin-top:30px;
+
+    background:linear-gradient(
+    135deg,
+    #4F7BFF,
+    #7EA8FF
+    );
+
+    color:white;
+
+}
+
+.discovery-card h3{
+
+    margin-bottom:12px;
+
+}
+
+.discovery-card p{
+
+    line-height:1.8;
+
+    font-size:18px;
+
+}
+
+/* -----------------------
+   반응형
+------------------------ */
+
+@media(max-width:900px){
+
+.lab-grid{
+
+grid-template-columns:1fr;
+
+}
+
+.star-wrapper{
+
+width:180px;
+height:180px;
+
+}
+
+.star{
+
+width:100px;
+height:100px;
+
+}
+
+}
