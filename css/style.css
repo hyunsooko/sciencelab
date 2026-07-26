@@ -1,144 +1,387 @@
-<!DOCTYPE html>
-<html lang="ko">
+/* ==========================
+   기본 설정
+========================== */
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
 
-    <title>Space Exploration Lab</title>
+body{
 
-    <link rel="stylesheet" href="css/style.css">
-</head>
+    font-family:
+    "Pretendard",
+    "Noto Sans KR",
+    sans-serif;
 
-<body>
+    color:white;
 
-<header class="hero">
+    line-height:1.7;
 
-    <div class="hero-content">
+    background-color:#08101d;
 
-        <div class="planet">🪐</div>
+    background-image:
+    radial-gradient(rgba(255,255,255,.45) 1px, transparent 1px),
+    radial-gradient(rgba(255,255,255,.18) 1px, transparent 1px);
 
-        <p class="subtitle">현수쌤과 함께하는</p>
+    background-size:
+    180px 180px,
+    320px 320px;
 
-        <h1>우주 탐구 실험실</h1>
+    background-position:
+    0 0,
+    90px 140px;
 
-        <p class="english">
-            Space Exploration Lab
-        </p>
+}
 
-        <p class="description">
-            행성부터 별, 은하까지<br>
-            직접 탐구하고 데이터를 분석하며<br>
-            우주의 원리를 이해하는 인터랙티브 과학 실험실
-        </p>
 
-        <div class="status">
-            현재 공개된 실험 <strong>3개</strong>
-        </div>
+/* ==========================
+   Hero
+========================== */
 
-    </div>
+.hero{
 
-</header>
+    text-align:center;
 
-<main class="container">
+    padding:70px 20px 55px;
 
-<h2>현재 이용 가능한 실험</h2>
+    background:
+    radial-gradient(circle at top,
+    #294676 0%,
+    #162440 40%,
+    #08101d 100%);
 
-<div class="lab-grid">
+}
 
-    <article class="lab-card">
+.planet{
 
-        <div class="icon">🔥</div>
+    font-size:68px;
 
-        <h3>별의 온도</h3>
+    margin-bottom:18px;
 
-        <p class="summary">
-            별의 색과 온도의 관계를 탐구합니다.
-        </p>
+}
 
-        <div class="info">
-            <span>📘 중학교 2학년</span>
-            <span>⏱ 10~15분</span>
-        </div>
+.subtitle{
 
-        <div class="tags">
-            <span>#별</span>
-            <span>#온도</span>
-            <span>#흑체복사</span>
-        </div>
+    color:#8cb9ff;
 
-        <a href="./star_temperature/" class="btn">
-            실험 시작 →
-        </a>
+    font-weight:600;
 
-    </article>
+    letter-spacing:1px;
 
-    <article class="lab-card">
+    margin-bottom:10px;
 
-        <div class="icon">⭐</div>
+}
 
-        <h3>별의 등급</h3>
+.hero h1{
 
-        <p class="summary">
-            밝기와 등급의 관계를 탐구합니다.
-        </p>
+    font-size:3rem;
 
-        <div class="info">
-            <span>📘 중학교 2학년</span>
-            <span>⏱ 10~15분</span>
-        </div>
+    margin-bottom:10px;
 
-        <div class="tags">
-            <span>#겉보기등급</span>
-            <span>#절대등급</span>
-        </div>
+}
 
-        <a href="./star_magnitude/" class="btn">
-            실험 시작 →
-        </a>
+.english{
 
-    </article>
+    color:#9bb7d8;
 
-    <article class="lab-card">
+    margin-bottom:25px;
 
-        <div class="icon">📏</div>
+    font-size:1.05rem;
 
-        <h3>별의 시차</h3>
+}
 
-        <p class="summary">
-            시차를 이용하여 별까지의 거리를 측정합니다.
-        </p>
+.description{
 
-        <div class="info">
-            <span>📘 중학교 2학년</span>
-            <span>⏱ 10~15분</span>
-        </div>
+    color:#d3deef;
 
-        <div class="tags">
-            <span>#거리측정</span>
-            <span>#파섹</span>
-        </div>
+    max-width:620px;
 
-        <a href="./star_parallax/" class="btn">
-            실험 시작 →
-        </a>
+    margin:auto;
 
-    </article>
+}
 
-</div>
+.status{
 
-</main>
+    display:inline-block;
 
-<footer>
+    margin-top:32px;
 
-    <p><strong>Space Exploration Lab</strong></p>
+    padding:10px 22px;
 
-    <p>Designed & Maintained by Hyunsoo Ko</p>
+    border-radius:999px;
 
-    <p>© 2026</p>
+    background:rgba(255,255,255,.08);
 
-</footer>
+}
 
-</body>
 
-</html>
+/* ==========================
+   Container
+========================== */
+
+.container{
+
+    width:min(1100px,92%);
+
+    margin:65px auto;
+
+}
+
+.container h2{
+
+    text-align:center;
+
+    margin-bottom:35px;
+
+    font-size:2rem;
+
+}
+
+
+/* ==========================
+   Card Grid
+========================== */
+
+.lab-grid{
+
+    display:grid;
+
+    grid-template-columns:
+    repeat(auto-fit,minmax(260px,300px));
+
+    justify-content:center;
+
+    gap:24px;
+
+}
+
+
+/* ==========================
+   Card
+========================== */
+
+.lab-card{
+
+    background:#1b2744;
+
+    border-radius:22px;
+
+    padding:28px;
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.28s;
+
+}
+
+.lab-card:hover{
+
+    transform:translateY(-6px);
+
+    border-color:#5b93ff;
+
+    box-shadow:
+    0 0 24px rgba(91,147,255,.18);
+
+}
+
+
+/* ==========================
+   Icon
+========================== */
+
+.icon{
+
+    width:72px;
+
+    height:72px;
+
+    margin:0 auto 22px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    font-size:38px;
+
+    border-radius:50%;
+
+    background:rgba(255,255,255,.05);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    transition:.25s;
+
+}
+
+.lab-card:hover .icon{
+
+    transform:scale(1.08);
+
+    background:rgba(91,147,255,.12);
+
+}
+
+
+/* ==========================
+   Text
+========================== */
+
+.lab-card h3{
+
+    text-align:center;
+
+    font-size:1.75rem;
+
+    margin-bottom:12px;
+
+}
+
+.summary{
+
+    text-align:center;
+
+    color:#d2d8e5;
+
+    min-height:55px;
+
+}
+
+
+/* ==========================
+   Info
+========================== */
+
+.info{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:18px;
+
+    margin:20px 0;
+
+    color:#9cb4d8;
+
+    font-size:.92rem;
+
+}
+
+
+/* ==========================
+   Tags
+========================== */
+
+.tags{
+
+    display:flex;
+
+    justify-content:center;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+
+    margin-bottom:22px;
+
+}
+
+.tags span{
+
+    background:#27395d;
+
+    padding:5px 12px;
+
+    border-radius:20px;
+
+    font-size:.82rem;
+
+}
+
+
+/* ==========================
+   Button
+========================== */
+
+.btn{
+
+    display:block;
+
+    width:100%;
+
+    text-align:center;
+
+    text-decoration:none;
+
+    padding:14px;
+
+    background:#5f84f4;
+
+    color:white;
+
+    font-weight:700;
+
+    border-radius:14px;
+
+    transition:.25s;
+
+}
+
+.btn:hover{
+
+    background:#7d9dff;
+
+}
+
+
+/* ==========================
+   Footer
+========================== */
+
+footer{
+
+    margin-top:80px;
+
+    padding:40px;
+
+    border-top:1px solid rgba(255,255,255,.08);
+
+    text-align:center;
+
+    color:#adb6c7;
+
+}
+
+footer p{
+
+    margin:6px;
+
+}
+
+
+/* ==========================
+   Mobile
+========================== */
+
+@media(max-width:768px){
+
+.hero h1{
+
+    font-size:2.2rem;
+
+}
+
+.info{
+
+    flex-direction:column;
+
+    gap:6px;
+
+}
+
+}
