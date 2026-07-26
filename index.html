@@ -185,6 +185,187 @@
 
 </footer>
 
+<section id="lab1" class="lab-section">
+
+    <h2 class="lab-title">
+        🌡️ Lab 1. 별의 온도와 색깔
+    </h2>
+
+    <p class="lab-subtitle">
+        슬라이더를 움직여 별의 표면 온도를 바꾸고, 별의 색과 종류가 어떻게 달라지는지 관찰해 보세요.
+    </p>
+
+    <div class="lab-grid">
+
+        <!-- 왼쪽 -->
+        <div class="control-card">
+
+            <h3>현재 온도</h3>
+
+            <div id="temperatureValue" class="temperature-value">
+                5800 K
+            </div>
+
+            <input
+                id="temperatureSlider"
+                type="range"
+                min="3000"
+                max="30000"
+                step="100"
+                value="5800"
+            >
+
+            <div class="star-info">
+
+                <div class="info-item">
+                    <span>대표 별</span>
+                    <strong id="starName">태양</strong>
+                </div>
+
+                <div class="info-item">
+                    <span>스펙트럼</span>
+                    <strong id="starType">G형</strong>
+                </div>
+
+                <div class="info-item">
+                    <span>별의 색</span>
+                    <strong id="starLabel">황색</strong>
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- 오른쪽 -->
+        <div class="viewer-card">
+
+           <div class="star-wrapper">
+
+    <div id="starGlow" class="star-glow"></div>
+
+    <div id="star" class="star"></div>
+
+</div>
+            <div class="spectral-text">
+                SPECTRAL TYPE
+            </div>
+
+            <div id="spectralType" class="spectral-type">
+                G
+            </div>
+
+            <h2 id="starDisplayName">
+                태양
+            </h2>
+
+            <p id="starDescription">
+                우리 태양과 비슷한 표면 온도를 가진 황색 별입니다.
+            </p>
+
+        </div>
+
+    </div>
+
+    <!-- 교과서 표 -->
+
+    <div class="temperature-table">
+
+        <h3>🌈 별의 색과 표면 온도</h3>
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>색</th>
+                    <th>표면 온도</th>
+                    <th>대표 별</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr data-type="O">
+
+                    <td>🔵 청색</td>
+                    <td>30,000K 이상</td>
+                    <td>나오스</td>
+
+                </tr>
+
+                <tr data-type="B">
+
+                    <td>🔵⚪ 청백색</td>
+                    <td>10,000~30,000K</td>
+                    <td>리겔</td>
+
+                </tr>
+
+                <tr data-type="A">
+
+                    <td>⚪ 백색</td>
+                    <td>7,500~10,000K</td>
+                    <td>시리우스</td>
+
+                </tr>
+
+                <tr data-type="F">
+
+                    <td>🟡⚪ 황백색</td>
+                    <td>6,000~7,500K</td>
+                    <td>카노푸스</td>
+
+                </tr>
+
+                <tr data-type="G">
+
+                    <td>🟡 황색</td>
+                    <td>5,200~6,000K</td>
+                    <td>태양</td>
+
+                </tr>
+
+                <tr data-type="K">
+
+                    <td>🟠 주황색</td>
+                    <td>3,700~5,200K</td>
+                    <td>아르크투루스</td>
+
+                </tr>
+
+                <tr data-type="M">
+
+                    <td>🔴 적색</td>
+                    <td>3,700K 이하</td>
+                    <td>베텔게우스</td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <!-- 오늘의 발견 -->
+
+    <div class="discovery-card">
+
+        <h3>💡 오늘의 발견</h3>
+
+        <p id="discoveryText">
+
+            태양은 노란색이지만 가장 뜨거운 별은 아닙니다.
+
+        </p>
+
+    </div>
+
+</section>
+    
 </body>
 
 <script src="js/data.js"></script>
