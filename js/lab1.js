@@ -23,11 +23,11 @@ const STAR_DATA = [
       description: "밤하늘에서 매우 밝게 보이는 백색 별입니다.",
       discovery:   "백색 별은 태양보다 훨씬 높은 온도를 가집니다."
     },
-    { min: 10001, max: 30000, temp: 18000, name: "리겔",        type: "B", label: "청백색",
+    { min: 10001, max: 29999, temp: 18000, name: "리겔",        type: "B", label: "청백색",
       description: "매우 뜨거운 청백색 초거성입니다.",
       discovery:   "푸른빛이 나타나기 시작하면 표면 온도가 매우 높습니다."
     },
-    { min: 30001, max: 50000, temp: 30000, name: "나오스",       type: "O", label: "청색",
+    { min: 30000, max: 100000, temp: 30000, name: "나오스",      type: "O", label: "청색",
       description: "가장 뜨거운 청색 별 가운데 하나입니다.",
       discovery:   "푸른 별이 가장 높은 표면 온도를 가집니다."
     }
@@ -46,17 +46,17 @@ const starLabel = document.querySelector("#starLabel");
 const starDescription = document.querySelector("#starDescription");
 const discoveryText = document.querySelector("#discoveryText");
 
-// 온도 범위에 해당하는 별 데이터 찾기
+// 현재 온도에 알맞은 별 찾기
 function getCurrentStar(temp) {
     for (const s of STAR_DATA) {
         if (temp >= s.min && temp <= s.max) {
             return s;
         }
     }
-    return STAR_DATA[0];
+    return STAR_DATA[STAR_DATA.length - 1]; // 30,000K 초과 시 무조건 O형 별(나오스) 리턴
 }
 
-// 색상 보간 계산 함수
+// 색상 보간 함수
 function interpolateColor(c1, c2, t) {
     const c1Num = parseInt(c1.slice(1), 16);
     const c2Num = parseInt(c2.slice(1), 16);
@@ -68,7 +68,7 @@ function interpolateColor(c1, c2, t) {
     return `rgb(${r}, ${g}, ${b})`;
 }
 
-// 온도별 연속적인 색상 변화 반환
+// 온도별 연속 색상 반환
 function getStarColor(temp) {
     const points = [
         { t: 3500,  c: "#EF4444" },  // 적색
@@ -79,6 +79,10 @@ function getStarColor(temp) {
         { t: 18000, c: "#93C5FD" },  // 청백색
         { t: 30000, c: "#3B82F6" }   // 청색
     ];
+
+    if (temp <= points[0].t) return points[0].c;
+    if (temp >= points[points.length - 1].t) return points[points.length - 1].c;
+
     for (let i = 0; i < points.length - 1; i++) {
         const p1 = points[i], p2 = points[i + 1];
         if (temp >= p1.t && temp <= p2.t) {
@@ -89,7 +93,7 @@ function getStarColor(temp) {
     return points[points.length - 1].c;
 }
 
-// 별 시각 요소 렌더링
+// 화면 별 그래픽 변경
 function renderStar() {
     const temp = Number(slider.value);
     const color = getStarColor(temp);
@@ -103,7 +107,7 @@ function renderStar() {
     }
 }
 
-// 정보 텍스트 렌더링
+// 텍스트 정보 변경
 function renderInfo(currentStar) {
     if (starName) starName.textContent = currentStar.name;
     if (starDisplayName) starDisplayName.textContent = currentStar.name;
@@ -113,12 +117,12 @@ function renderInfo(currentStar) {
     if (starDescription) starDescription.textContent = currentStar.description;
 }
 
-// 오늘의 발견 텍스트 렌더링
+// 발견 카드 변경
 function renderDiscovery(currentStar) {
     if (discoveryText) discoveryText.textContent = currentStar.discovery;
 }
 
-// 실험 상태 전체 업데이트
+// 전체 실험 업데이트
 function updateExperiment() {
     if (!slider) return;
     const temp = Number(slider.value);
@@ -133,13 +137,14 @@ function updateExperiment() {
     renderDiscovery(currentStar);
 }
 
-// 대표 온도 스냅 기능
+// 스냅 포인트 (대표 온도 근처로 마우스 손을 뗐을 때 자동 정렬)
 const SNAP_POINTS = [3500, 4500, 5800, 6700, 9500, 18000, 30000];
 function handleSnap() {
     if (!slider) return;
     const value = Number(slider.value);
     let nearest = SNAP_POINTS[0];
     let minDiff = Infinity;
+    
     SNAP_POINTS.forEach(pt => {
         const diff = Math.abs(value - pt);
         if (diff < minDiff) {
@@ -147,7 +152,9 @@ function handleSnap() {
             nearest = pt;
         }
     });
-    if (minDiff <= 500) {
+
+    // 1,000K 이내로 가까워지면 대표 온도로 스냅
+    if (minDiff <= 1000) {
         slider.value = nearest;
     }
     updateExperiment();
