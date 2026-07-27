@@ -15,7 +15,7 @@
             box-sizing: border-box;
         }
 
-        /* 헤더 영역: ④ 버튼을 제목 오른쪽 끝에自然스럽게 정렬 */
+        /* 헤더 영역 */
         .lab-header {
             display: flex;
             justify-content: space-between;
@@ -38,7 +38,6 @@
             margin: 4px 0 0 0;
         }
 
-        /* 돌아가기 버튼 헤더 정렬 스타일 */
         .back-btn {
             background-color: #334155;
             color: #f8fafc;
@@ -55,7 +54,7 @@
             background-color: #475569;
         }
 
-        /* 카드 공통 기본 스타일 */
+        /* 카드 공통 스타일 */
         .control-card, .viewer-card, .discovery-card {
             background-color: #1e293b !important;
             color: #ffffff !important;
@@ -119,54 +118,77 @@
             font-weight: 500;
         }
 
-        /* ③ 오개념 FAQ 리스트 스타일 (카드 대신 가벼운 리스트 형태) */
+        /* ⚠️ 질문/답변 명확한 구별을 위한 FAQ 스타일 */
         .faq-section {
             background-color: #1e293b;
             border: 1px solid #334155;
             border-radius: 16px;
-            padding: 16px 20px; /* ① 여백 축소 (padding: 14px~16px 수준) */
+            padding: 18px 20px;
         }
 
-        /* ② FAQ 제목 간소화 */
         .faq-title {
             color: #facc15 !important;
             font-size: 1.1rem !important;
             font-weight: bold;
-            margin-bottom: 12px;
+            margin-bottom: 14px;
         }
 
         .faq-list {
             display: flex;
             flex-direction: column;
+            gap: 14px;
         }
 
-        /* 리스트 형태 항목 스타일 */
+        /* 각 질문-답변 세트 항목 */
         .faq-item {
-            padding: 10px 0;
+            padding-bottom: 12px;
             border-bottom: 1px solid #334155;
         }
 
         .faq-item:last-child {
-            border-bottom: none; /* 마지막 항목은 구분선 제거 */
+            border-bottom: none;
             padding-bottom: 0;
         }
 
-        .faq-item h4 {
+        /* 질문(Q) 스타일: 밝은 파란색 및 두꺼운 글씨 */
+        .faq-question {
             color: #60a5fa !important;
-            font-size: 0.95rem !important;
-            margin: 0 0 4px 0;
-            line-height: 1.35;
+            font-size: 0.98rem !important;
+            font-weight: 700 !important;
+            margin: 0 0 6px 0;
+            line-height: 1.4;
             display: flex;
-            align-items: center;
+            align-items: flex-start;
             gap: 6px;
         }
 
-        .faq-item p {
+        .faq-question .q-badge {
+            background-color: #2563eb;
+            color: #ffffff;
+            font-size: 0.8rem;
+            padding: 1px 6px;
+            border-radius: 4px;
+            font-weight: 800;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        /* 답변(A) 스타일: 여백 구분 및 연한 글씨 */
+        .faq-answer {
             color: #cbd5e1 !important;
             font-size: 0.88rem !important;
-            line-height: 1.5;
+            line-height: 1.55;
             margin: 0;
-            padding-left: 18px; /* 아이콘 넓이만큼 살짝 들여쓰기 */
+            padding-left: 28px; /* 질문 태그 뒤로 깔끔하게 들여쓰기 */
+            position: relative;
+        }
+
+        .faq-answer::before {
+            content: "A.";
+            position: absolute;
+            left: 8px;
+            color: #94a3b8;
+            font-weight: 700;
         }
 
         /* 3열 대시보드 레이아웃 */
@@ -182,7 +204,7 @@
 
     <div class="container" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
         
-        <!-- ④ 헤더 영역 (제목 + 버튼 통합 정렬) -->
+        <!-- 헤더 영역 -->
         <header class="lab-header">
             <div>
                 <h2 class="lab-title">🌡️ Lab 1. 별의 온도와 색깔</h2>
@@ -193,10 +215,10 @@
             <a href="index.html" class="back-btn">← 메인으로</a>
         </header>
 
-        <!-- 🖥️ 3열 가로 풀화면 대시보드 -->
+        <!-- 대시보드 메인 영역 -->
         <div class="main-dashboard">
             
-            <!-- 1열 (왼쪽): 컨트롤러 + 오늘의 발견 -->
+            <!-- 1열 (왼쪽) -->
             <div class="column-1">
                 <div class="control-card">
                     <h3 style="color: white; margin-top: 0; margin-bottom: 6px; font-size: 1.1rem;">현재 온도</h3>
@@ -218,7 +240,7 @@
                 </div>
             </div>
 
-            <!-- 2열 (중앙): 별 뷰어 카드 -->
+            <!-- 2열 (중앙) -->
             <div class="column-2">
                 <div class="viewer-card" style="text-align: center; padding: 28px 20px;">
                     <div class="star-wrapper" style="position: relative; height: 160px; display: flex; align-items: center; justify-content: center;">
@@ -232,16 +254,14 @@
                 </div>
             </div>
 
-            <!-- 3열 (오른쪽): 리스트 형태의 오개념 영역 -->
+            <!-- 3열 (오른쪽): Q & A 구분된 오개념 영역 -->
             <div class="column-3">
                 <div class="faq-section">
-                    <!-- ② 간소화된 FAQ 제목 -->
                     <div class="faq-title">
                         ⚠️ 잠깐! 헷갈리기 쉬운 별의 비밀
                     </div>
-                    <!-- ③ 리스트 형태로 변경되는 FAQ 컨테이너 -->
                     <div id="faqContainer" class="faq-list">
-                        <!-- 자바스크립트로 리스트 항목이 주입됩니다 -->
+                        <!-- 자바스크립트로 Q와 A가 구분된 목록이 들어옵니다 -->
                     </div>
                 </div>
             </div>
