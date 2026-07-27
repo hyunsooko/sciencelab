@@ -11,7 +11,7 @@
     <!-- ========================================== -->
     <!-- 1. 메인 페이지                               -->
     <!-- ========================================== -->
-    <div id="main-page">
+    <div id="main-page" class="view-section">
         <header class="hero">
             <div class="hero-content">
                 <div class="hero-left">
@@ -53,8 +53,8 @@
                         <span>#온도</span>
                         <span>#흑체복사</span>
                     </div>
-                    <!-- 기존 .btn 스타일을 유지하되, 이동 목표(data-target) 지정 -->
-                    <button class="btn" data-target="lab1-page">실험 시작 →</button>
+                    <!-- href를 이용하여 #lab1-page로 명확히 이동합니다 -->
+                    <a href="#lab1-page" class="btn">실험 시작 →</a>
                 </article>
 
                 <!-- [실험 2] 별의 등급 -->
@@ -70,7 +70,7 @@
                         <span>#겉보기등급</span>
                         <span>#절대등급</span>
                     </div>
-                    <button class="btn" data-target="lab2-page">실험 시작 →</button>
+                    <a href="#lab2-page" class="btn">실험 시작 →</a>
                 </article>
 
                 <!-- [실험 3] 별의 시차 -->
@@ -86,7 +86,7 @@
                         <span>#거리측정</span>
                         <span>#파섹</span>
                     </div>
-                    <button class="btn" data-target="lab3-page">실험 시작 →</button>
+                    <a href="#lab3-page" class="btn">실험 시작 →</a>
                 </article>
 
             </section>
@@ -103,8 +103,8 @@
     <!-- ========================================== -->
     <!-- 2. Lab 1 실험실 페이지                       -->
     <!-- ========================================== -->
-    <section id="lab1-page" class="lab-page hidden">
-        <button class="btn back-btn" style="width: auto; margin-bottom: 20px;">← 메인 목록으로 돌아가기</button>
+    <div id="lab1-page" class="view-section hidden">
+        <a href="#main-page" class="btn back-btn">← 메인 목록으로 돌아가기</a>
 
         <h2 class="lab-title">🌡️ Lab 1. 별의 온도와 색깔</h2>
         <p class="lab-subtitle">
@@ -162,8 +162,9 @@
             <h3>💡 오늘의 발견</h3>
             <p id="discoveryText">태양은 노란색이지만 가장 뜨거운 별은 아닙니다.</p>
         </div>
-    </section>
+    </div>
 
+    <!-- 스크립트 파일 연결 -->
     <script src="js/data.js"></script>
     <script src="js/dom.js"></script>
     <script src="js/lab1.js"></script>
