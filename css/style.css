@@ -912,3 +912,72 @@ height:100px;
     background-color: #3b82f6;
     color: white;
 }
+
+/* ========================================== */
+/* Lab 1 디자인 가독성 개선 스타일             */
+/* ========================================== */
+
+/* 카드 배경 및 글자 가독성 높이기 */
+.control-card, .viewer-card, .temperature-table, .discovery-card {
+    background-color: #1e293b !important; /* 선명한 어두운 네이비 카드로 변경 */
+    color: #f8fafc !important;             /* 기본 글자색 흰색 */
+    border: 1px solid #334155;
+    border-radius: 12px;
+    padding: 24px;
+}
+
+/* 온도 숫자 및 강조 글자 */
+.temperature-value {
+    color: #60a5fa !important; /* 밝은 파란색 */
+    font-size: 2.2rem;
+    font-weight: 800;
+}
+
+.star-info .info-item span {
+    color: #94a3b8 !important; /* 밝은 회색 라벨 */
+}
+
+.star-info .info-item strong {
+    color: #ffffff !important; /* 강한 흰색 강조 */
+}
+
+/* 별의 스펙트럼 문구 */
+.spectral-text {
+    color: #94a3b8 !important;
+}
+
+.spectral-type {
+    color: #818cf8 !important;
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+/* 교과서 표 디자인 개선 */
+.temperature-table table {
+    width: 100%;
+    color: #f8fafc;
+    border-collapse: collapse;
+}
+
+.temperature-table th, .temperature-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #334155;
+    color: #f8fafc !important;
+}
+
+/* 현재 속한 행 하이라이트 효과 */
+.temperature-table tr.active {
+    background-color: rgba(59, 130, 246, 0.35) !important;
+    font-weight: bold;
+}
+
+/* 슬라이더 컨트롤 스타일 */
+#temperatureSlider {
+    width: 100%;
+    height: 8px;
+    border-radius: 5px;
+    accent-color: #3b82f6;
+    cursor: pointer;
+    margin: 15px 0;
+}
