@@ -6,7 +6,6 @@
     <title>Lab 1. 별의 온도와 색깔 - 우주 탐구 실험실</title>
     <link rel="stylesheet" href="css/style.css">
     <style>
-        /* 전체 화면 스크롤 최소화 및 기본 다크 테마 */
         body {
             background-color: #0f172a;
             color: #f8fafc;
@@ -77,7 +76,7 @@
             margin: 0;
         }
 
-        /* ⚠️ 오개념 FAQ 영역 스타일 (우측 배치용) */
+        /* ⚠️ 오개념 FAQ 영역 스타일 */
         .faq-section {
             margin-top: 16px;
         }
@@ -89,8 +88,14 @@
         }
         .faq-grid {
             display: flex;
-            flex-direction: column; /* 오개념 카드를 위아래로 쌓음 */
+            flex-direction: column;
             gap: 12px;
+        }
+        .faq-card {
+            background-color: #1e293b !important;
+            border: 1px solid #334155 !important;
+            border-radius: 12px;
+            padding: 14px 18px;
         }
         .faq-card h4 {
             color: #60a5fa !important;
@@ -106,10 +111,10 @@
             margin: 0;
         }
 
-        /* 한눈에 보이는 2열 대형 그리드 Layout */
+        /* 2열 레이아웃 대시보드 */
         .main-dashboard {
             display: grid;
-            grid-template-columns: 1fr 1.1fr; /* 좌측 : 우측 비율 */
+            grid-template-columns: 1fr 1.1fr;
             gap: 20px;
             align-items: start;
         }
@@ -118,7 +123,7 @@
 <body>
 
     <div class="container" style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
-        <!-- 상단 헤더 영역 -->
+        <!-- 상단 헤더 -->
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
             <div>
                 <h2 class="lab-title" style="color: white; font-size: 1.6rem; margin: 0;">🌡️ Lab 1. 별의 온도와 색깔</h2>
@@ -129,12 +134,11 @@
             <a href="index.html" class="btn" style="background-color: #3b82f6; color: white; padding: 8px 16px; border-radius: 8px; text-decoration: none; font-weight: 600; font-size: 0.9rem;">← 메인 목록으로 돌아가기</a>
         </div>
 
-        <!-- 🖥️ 대시보드 메인 영역 (한 화면 수놓기) -->
+        <!-- 대시보드 메인 영역 -->
         <div class="main-dashboard">
             
-            <!-- ⬅️ 왼쪽 영역: 컨트롤러 + 오늘의 발견 -->
+            <!-- 왼쪽 영역 -->
             <div class="left-column">
-                <!-- 1. 컨트롤러 카드 -->
                 <div class="control-card">
                     <h3 style="color: white; margin-top: 0; margin-bottom: 6px; font-size: 1.1rem;">현재 온도</h3>
                     <div id="temperatureValue" class="temperature-value">5,800 K</div>
@@ -147,7 +151,6 @@
                     </div>
                 </div>
 
-                <!-- 2. 오늘의 발견 카드 (컨트롤러 바로 아래에 밀착) -->
                 <div class="discovery-card">
                     <h3>💡 오늘의 발견</h3>
                     <p id="discoveryText">
@@ -156,9 +159,8 @@
                 </div>
             </div>
 
-            <!-- ➡️ 오른쪽 영역: 별 뷰어 + 오개념 FAQ -->
+            <!-- 오른쪽 영역 -->
             <div class="right-column">
-                <!-- 1. 별 뷰어 카드 -->
                 <div class="viewer-card" style="text-align: center;">
                     <div class="star-wrapper" style="position: relative; height: 140px; display: flex; align-items: center; justify-content: center;">
                         <div id="starGlow" style="position: absolute; width: 100px; height: 100px; border-radius: 50%; background: #ffd54f; filter: blur(20px); opacity: 0.6;"></div>
@@ -170,13 +172,13 @@
                     <p id="starDescription">우리 태양과 비슷한 표면 온도를 가진 황색 별입니다.</p>
                 </div>
 
-                <!-- 2. 오개념 FAQ (뷰어 바로 옆/아래에 연결) -->
+                <!-- 오개념 FAQ 컨테이너 -->
                 <div class="faq-section">
                     <div class="faq-title">
                         ⚠️ 잠깐! 헷갈리기 쉬운 별의 비밀 (오개념 FAQ)
                     </div>
                     <div id="faqContainer" class="faq-grid">
-                        <!-- 자바스크립트로 2개의 랜덤 오개념 카드가 들어옵니다 -->
+                        <!-- 자바스크립트로 카드가 생성되어 여기에 들어갑니다 -->
                     </div>
                 </div>
             </div>
@@ -184,7 +186,7 @@
         </div>
     </div>
 
-    <!-- 로직 자바스크립트 연결 -->
+    <!-- 스크립트 파일 연결 -->
     <script src="js/lab1.js"></script>
 </body>
 </html>
