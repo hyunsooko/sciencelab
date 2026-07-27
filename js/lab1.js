@@ -33,6 +33,34 @@ const STAR_DATA = [
     }
 ];
 
+// 중2 맞춤형 오개념 FAQ 데이터 세트
+const MISCONCEPTION_DATA = [
+    {
+        question: "붉은색 별은 뜨겁고, 푸른색 별은 차갑지 않나요?",
+        answer: "반대입니다! 가스레인지 불꽃이나 쇳물을 떠올려보세요. 온도가 낮을수록 붉은색을 띠고, 온도가 높을수록 푸른색을 띱니다."
+    },
+    {
+        question: "별의 색깔을 보면 별의 크기도 알 수 있나요?",
+        answer: "아닙니다. 색깔은 오직 별의 '표면 온도' 정보만 알려줍니다. 같은 노란색 별이라도 태양처럼 작은 주계열성일 수도 있고, 거대한 거성일 수도 있습니다."
+    },
+    {
+        question: "밤하늘에서 밝게 보이는 별이 무조건 더 뜨거운 별인가요?",
+        answer: "아닙니다! 별의 겉보기 밝기는 별의 실제 밝기와 지구까지의 거리에 따라 달라집니다. 온도가 낮아도 지구와 가까우면 밝게 보입니다."
+    },
+    {
+        question: "모든 별은 평생 동안 처음에 태어난 색깔 그대로 유지되나요?",
+        answer: "아닙니다. 별도 진화하면서 표면 온도가 변하기 때문에 색깔이 바뀝니다. 태양도 나중에 부풀어 오르며 붉은색 적색거성이 됩니다."
+    },
+    {
+        question: "별의 색깔로 알 수 있는 온도는 별 중심의 온도인가요?",
+        answer: "아닙니다. 우리가 눈으로 관찰하는 별의 색은 별의 '표면 온도'입니다. 별 중심부는 표면보다 훨씬 뜨거운 수천만 도에 달합니다."
+    },
+    {
+        question: "노란색인 태양이 우주에서 가장 뜨겁고 에너지가 강한 별인가요?",
+        answer: "아닙니다! 태양은 표면 온도가 약 5,800K인 중간 수준의 황색 별입니다. 청색 별은 표면 온도가 30,000K 이상으로 훨씬 뜨겁습니다."
+    }
+];
+
 // DOM 요소 선택
 const slider = document.querySelector("#temperatureSlider");
 const temperatureValue = document.querySelector("#temperatureValue");
@@ -45,18 +73,17 @@ const spectralType = document.querySelector("#spectralType");
 const starLabel = document.querySelector("#starLabel");
 const starDescription = document.querySelector("#starDescription");
 const discoveryText = document.querySelector("#discoveryText");
+const faqContainer = document.querySelector("#faqContainer");
 
-// 현재 온도에 알맞은 별 찾기
 function getCurrentStar(temp) {
     for (const s of STAR_DATA) {
         if (temp >= s.min && temp <= s.max) {
             return s;
         }
     }
-    return STAR_DATA[STAR_DATA.length - 1]; // 30,000K 초과 시 무조건 O형 별(나오스) 리턴
+    return STAR_DATA[STAR_DATA.length - 1];
 }
 
-// 색상 보간 함수
 function interpolateColor(c1, c2, t) {
     const c1Num = parseInt(c1.slice(1), 16);
     const c2Num = parseInt(c2.slice(1), 16);
@@ -68,16 +95,15 @@ function interpolateColor(c1, c2, t) {
     return `rgb(${r}, ${g}, ${b})`;
 }
 
-// 온도별 연속 색상 반환
 function getStarColor(temp) {
     const points = [
-        { t: 3500,  c: "#EF4444" },  // 적색
-        { t: 4500,  c: "#F97316" },  // 주황색
-        { t: 5800,  c: "#EAB308" },  // 황색
-        { t: 6700,  c: "#FEF08A" },  // 황백색
-        { t: 9500,  c: "#FFFFFF" },  // 백색
-        { t: 18000, c: "#93C5FD" },  // 청백색
-        { t: 30000, c: "#3B82F6" }   // 청색
+        { t: 3500,  c: "#EF4444" },
+        { t: 4500,  c: "#F97316" },
+        { t: 5800,  c: "#EAB308" },
+        { t: 6700,  c: "#FEF08A" },
+        { t: 9500,  c: "#FFFFFF" },
+        { t: 18000, c: "#93C5FD" },
+        { t: 30000, c: "#3B82F6" }
     ];
 
     if (temp <= points[0].t) return points[0].c;
@@ -93,7 +119,6 @@ function getStarColor(temp) {
     return points[points.length - 1].c;
 }
 
-// 화면 별 그래픽 변경
 function renderStar() {
     const temp = Number(slider.value);
     const color = getStarColor(temp);
@@ -107,7 +132,6 @@ function renderStar() {
     }
 }
 
-// 텍스트 정보 변경
 function renderInfo(currentStar) {
     if (starName) starName.textContent = currentStar.name;
     if (starDisplayName) starDisplayName.textContent = currentStar.name;
@@ -117,12 +141,26 @@ function renderInfo(currentStar) {
     if (starDescription) starDescription.textContent = currentStar.description;
 }
 
-// 발견 카드 변경
 function renderDiscovery(currentStar) {
     if (discoveryText) discoveryText.textContent = currentStar.discovery;
 }
 
-// 전체 실험 업데이트
+// 🎲 오개념 랜덤 2개 추출 함수
+function renderRandomFAQ() {
+    if (!faqContainer) return;
+
+    // 랜덤으로 섞어서 2개 추출
+    const shuffled = [...MISCONCEPTION_DATA].sort(() => 0.5 - Math.random());
+    const selected = shuffled.slice(0, 2);
+
+    faqContainer.innerHTML = selected.map(item => `
+        <div class="faq-card">
+            <h4>${item.question}</h4>
+            <p>${item.answer}</p>
+        </div>
+    `).join('');
+}
+
 function updateExperiment() {
     if (!slider) return;
     const temp = Number(slider.value);
@@ -137,7 +175,6 @@ function updateExperiment() {
     renderDiscovery(currentStar);
 }
 
-// 스냅 포인트 (대표 온도 근처로 마우스 손을 뗐을 때 자동 정렬)
 const SNAP_POINTS = [3500, 4500, 5800, 6700, 9500, 18000, 30000];
 function handleSnap() {
     if (!slider) return;
@@ -153,19 +190,19 @@ function handleSnap() {
         }
     });
 
-    // 1,000K 이내로 가까워지면 대표 온도로 스냅
     if (minDiff <= 1000) {
         slider.value = nearest;
     }
     updateExperiment();
 }
 
-// 초기화
 function initLab1() {
     if (!slider) return;
     slider.addEventListener("input", updateExperiment);
     slider.addEventListener("change", handleSnap);
+    
     updateExperiment();
+    renderRandomFAQ(); // 실행 시 오개념 2개 무작위 출력!
 }
 
 document.addEventListener("DOMContentLoaded", initLab1);
