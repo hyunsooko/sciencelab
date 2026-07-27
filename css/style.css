@@ -879,3 +879,36 @@ height:100px;
 .hidden {
     display: none !important;
 }
+
+/* ========================================== */
+/* 순수 CSS 기반 화면 전환 (SPA) 스타일          */
+/* ========================================== */
+
+/* 1. 기본적으로 모든 페이지 영역을 숨깁니다 */
+.page-view {
+    display: none;
+}
+
+/* 2. 주소에 아무 해시(#)가 없거나 #main-page일 때는 메인만 보여줍니다 */
+#main-page {
+    display: block;
+}
+
+/* 3. 특정 실험실 선택 시(예: #lab1-page), 메인은 가리고 해당 실험실만 띄웁니다 */
+:target {
+    display: block !important;
+}
+
+:target ~ #main-page {
+    display: none !important;
+}
+
+/* 4. 돌아가기 버튼 전용 스타일 */
+.back-btn {
+    display: inline-block;
+    width: auto !important;
+    text-decoration: none;
+    margin-bottom: 20px;
+    background-color: #3b82f6;
+    color: white;
+}
