@@ -15,28 +15,54 @@
             box-sizing: border-box;
         }
 
-        /* 카드 공통 기본 스타일 */
-        .control-card, .viewer-card, .discovery-card, .faq-card {
-            background-color: #1e293b !important;
-            color: #ffffff !important;
-            border: 1px solid #334155 !important;
-            border-radius: 16px;
-            padding: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
+        /* 헤더 영역: ④ 버튼을 제목 오른쪽 끝에自然스럽게 정렬 */
+        .lab-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #1e293b;
         }
 
-        /* 1) 상단 제목 크기 확대 및 스타일 */
         .lab-title {
             color: #ffffff !important;
-            font-size: 2.2rem !important; /* 시원하게 확 키운 제목 크기 */
+            font-size: 2rem !important;
             font-weight: 800 !important;
             margin: 0;
         }
 
         .lab-subtitle {
             color: #94a3b8 !important;
-            font-size: 1.05rem !important;
-            margin: 6px 0 0 0;
+            font-size: 0.95rem !important;
+            margin: 4px 0 0 0;
+        }
+
+        /* 돌아가기 버튼 헤더 정렬 스타일 */
+        .back-btn {
+            background-color: #334155;
+            color: #f8fafc;
+            padding: 8px 16px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s;
+            white-space: nowrap;
+        }
+
+        .back-btn:hover {
+            background-color: #475569;
+        }
+
+        /* 카드 공통 기본 스타일 */
+        .control-card, .viewer-card, .discovery-card {
+            background-color: #1e293b !important;
+            color: #ffffff !important;
+            border: 1px solid #334155 !important;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
         }
 
         /* 컨트롤러 스타일 */
@@ -93,47 +119,60 @@
             font-weight: 500;
         }
 
-        /* ⚠️ 2) 오개념 FAQ (우측 3열 배치 스타일) */
+        /* ③ 오개념 FAQ 리스트 스타일 (카드 대신 가벼운 리스트 형태) */
         .faq-section {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .faq-title {
-            color: #facc15 !important;
-            font-size: 1.15rem !important;
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
-        .faq-grid {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-        .faq-card {
-            background-color: #1e293b !important;
-            border: 1px solid #334155 !important;
-            border-radius: 14px;
-            padding: 16px;
-        }
-        .faq-card h4 {
-            color: #60a5fa !important;
-            font-size: 0.98rem !important;
-            margin-top: 0;
-            margin-bottom: 6px;
-            line-height: 1.35;
-        }
-        .faq-card p {
-            color: #cbd5e1 !important;
-            font-size: 0.9rem !important;
-            line-height: 1.5;
-            margin: 0;
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 16px;
+            padding: 16px 20px; /* ① 여백 축소 (padding: 14px~16px 수준) */
         }
 
-        /* 3열 대시보드 구조 (가로 여백을 가득 채우는 1:1.1:1.1 그리드) */
+        /* ② FAQ 제목 간소화 */
+        .faq-title {
+            color: #facc15 !important;
+            font-size: 1.1rem !important;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 리스트 형태 항목 스타일 */
+        .faq-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #334155;
+        }
+
+        .faq-item:last-child {
+            border-bottom: none; /* 마지막 항목은 구분선 제거 */
+            padding-bottom: 0;
+        }
+
+        .faq-item h4 {
+            color: #60a5fa !important;
+            font-size: 0.95rem !important;
+            margin: 0 0 4px 0;
+            line-height: 1.35;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .faq-item p {
+            color: #cbd5e1 !important;
+            font-size: 0.88rem !important;
+            line-height: 1.5;
+            margin: 0;
+            padding-left: 18px; /* 아이콘 넓이만큼 살짝 들여쓰기 */
+        }
+
+        /* 3열 대시보드 레이아웃 */
         .main-dashboard {
             display: grid;
-            grid-template-columns: 0.95fr 1.05fr 1.15fr; /* 3개 구역 가로 분할 */
+            grid-template-columns: 0.95fr 1.05fr 1.15fr;
             gap: 20px;
             align-items: start;
         }
@@ -141,19 +180,18 @@
 </head>
 <body>
 
-    <!-- 화면 전체 폭을 가득 활용하도록 max-width를 1400px로 확장 -->
     <div class="container" style="max-width: 1400px; margin: 0 auto; padding: 0 24px;">
         
-        <!-- 상단 헤더 영역 -->
-        <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px;">
+        <!-- ④ 헤더 영역 (제목 + 버튼 통합 정렬) -->
+        <header class="lab-header">
             <div>
                 <h2 class="lab-title">🌡️ Lab 1. 별의 온도와 색깔</h2>
                 <p class="lab-subtitle">
                     슬라이더를 움직여 별의 표면 온도를 바꾸고, 별의 색과 종류가 어떻게 달라지는지 관찰해 보세요.
                 </p>
             </div>
-            <a href="index.html" class="btn" style="background-color: #3b82f6; color: white; padding: 10px 20px; border-radius: 10px; text-decoration: none; font-weight: 600; font-size: 0.95rem;">← 메인 목록으로 돌아가기</a>
-        </div>
+            <a href="index.html" class="back-btn">← 메인으로</a>
+        </header>
 
         <!-- 🖥️ 3열 가로 풀화면 대시보드 -->
         <div class="main-dashboard">
@@ -194,14 +232,16 @@
                 </div>
             </div>
 
-            <!-- 3열 (오른쪽): 오개념 FAQ 카드 2개 -->
+            <!-- 3열 (오른쪽): 리스트 형태의 오개념 영역 -->
             <div class="column-3">
                 <div class="faq-section">
+                    <!-- ② 간소화된 FAQ 제목 -->
                     <div class="faq-title">
-                        ⚠️ 잠깐! 헷갈리기 쉬운 별의 비밀 (오개념 FAQ)
+                        ⚠️ 잠깐! 헷갈리기 쉬운 별의 비밀
                     </div>
-                    <div id="faqContainer" class="faq-grid">
-                        <!-- 자바스크립트로 생성된 2개의 오개념 카드가 여기에 쏙 들어옵니다 -->
+                    <!-- ③ 리스트 형태로 변경되는 FAQ 컨테이너 -->
+                    <div id="faqContainer" class="faq-list">
+                        <!-- 자바스크립트로 리스트 항목이 주입됩니다 -->
                     </div>
                 </div>
             </div>
@@ -209,7 +249,7 @@
         </div>
     </div>
 
-    <!-- 로직 자바스크립트 연결 -->
+    <!-- 스크립트 연결 -->
     <script src="js/lab1.js"></script>
 </body>
 </html>
