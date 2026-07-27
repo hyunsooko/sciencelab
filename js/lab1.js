@@ -143,7 +143,7 @@ function renderDiscovery(currentStar) {
     if (discoveryText) discoveryText.textContent = currentStar.discovery;
 }
 
-// ③ 묵직한 상자 카드 대신 리스트 형태로 HTML 주입
+// 💡 질문(Q)과 답변(A)을 시각적으로 명확히 분리하여 HTML 출력
 function renderRandomFAQ() {
     if (!faqContainer) return;
 
@@ -152,8 +152,13 @@ function renderRandomFAQ() {
 
     faqContainer.innerHTML = selected.map(item => `
         <div class="faq-item">
-            <h4>💡 ${item.question}</h4>
-            <p>${item.answer}</p>
+            <div class="faq-question">
+                <span class="q-badge">Q</span>
+                <span>${item.question}</span>
+            </div>
+            <div class="faq-answer">
+                ${item.answer}
+            </div>
         </div>
     `).join('');
 }
