@@ -13,12 +13,43 @@
             font-family: system-ui, -apple-system, sans-serif;
         }
 
-        .control-card, .viewer-card, .discovery-card {
+        /* 컨트롤 및 뷰어 카드 스타일 */
+        .control-card, .viewer-card {
             background-color: #1e293b !important;
             color: #ffffff !important;
             border: 1px solid #334155 !important;
             border-radius: 16px;
             padding: 24px;
+        }
+
+        /* 💡 오늘의 발견 카드 전용 스타일 (가독성 극대화) */
+        .discovery-card {
+            background-color: #1e293b !important; /* 깔끔한 어두운 네이비 배경 */
+            border: 1px solid #3b82f6 !important; /* 파란색 테두리로 포인트 */
+            border-radius: 16px;
+            padding: 24px;
+            margin-top: 24px;
+        }
+
+        /* 오늘의 발견 제목 */
+        .discovery-card h3 {
+            color: #facc15 !important; /* 밝고 눈에 띄는 노란색 */
+            font-size: 1.3rem !important;
+            font-weight: 700 !important;
+            margin-top: 0;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* 오늘의 발견 본문 텍스트 (글자색 수정 완료!) */
+        #discoveryText {
+            color: #ffffff !important; /* 완전한 선명한 흰색 */
+            font-size: 1.15rem !important;
+            font-weight: 500 !important;
+            line-height: 1.6 !important;
+            margin: 0;
         }
 
         .temperature-value {
@@ -56,6 +87,7 @@
 <body>
 
     <div class="container" style="padding-top: 30px; padding-bottom: 50px; max-width: 1000px; margin: 0 auto;">
+        <!-- 메인 목록으로 돌아가는 버튼 -->
         <a href="index.html" class="btn" style="background-color: #3b82f6; color: white; display: inline-block; padding: 10px 18px; border-radius: 8px; margin-bottom: 20px; text-decoration: none; font-weight: 600;">← 메인 목록으로 돌아가기</a>
 
         <h2 class="lab-title" style="color: white; font-size: 1.8rem;">🌡️ Lab 1. 별의 온도와 색깔</h2>
@@ -63,13 +95,12 @@
             슬라이더를 움직여 별의 표면 온도를 바꾸고, 별의 색과 종류가 어떻게 달라지는지 관찰해 보세요.
         </p>
 
+        <!-- 메인 실험 영역 -->
         <div class="lab-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
-            <!-- 컨트롤러 카드 -->
+            <!-- 왼쪽 컨트롤러 카드 -->
             <div class="control-card">
                 <h3 style="color: white; margin-top: 0; margin-bottom: 10px;">현재 온도</h3>
                 <div id="temperatureValue" class="temperature-value">5,800 K</div>
-                
-                <!-- max 값을 50000으로 늘려 30,000K 이상까지 여유롭게 이동 가능하도록 수정 -->
                 <input id="temperatureSlider" type="range" min="3000" max="50000" step="100" value="5800">
 
                 <div class="star-info">
@@ -79,7 +110,7 @@
                 </div>
             </div>
 
-            <!-- 뷰어 카드 -->
+            <!-- 오른쪽 별 뷰어 카드 -->
             <div class="viewer-card" style="text-align: center;">
                 <div class="star-wrapper" style="position: relative; height: 180px; display: flex; align-items: center; justify-content: center;">
                     <div id="starGlow" style="position: absolute; width: 120px; height: 120px; border-radius: 50%; background: #ffd54f; filter: blur(20px); opacity: 0.6;"></div>
@@ -92,14 +123,16 @@
             </div>
         </div>
 
-        <div class="discovery-card" style="margin-top: 24px;">
-            <h3 style="color: white; margin-top: 0;">💡 오늘의 발견</h3>
-            <p id="discoveryText" style="color: #60a5fa; font-size: 1.1rem; margin-top: 8px; margin-bottom: 0;">
+        <!-- 하단 오늘의 발견 카드 (가독성 개심 완료) -->
+        <div class="discovery-card">
+            <h3>💡 오늘의 발견</h3>
+            <p id="discoveryText">
                 태양은 노란색이지만 가장 뜨거운 별은 아닙니다.
             </p>
         </div>
     </div>
 
+    <!-- 로직 자바스크립트 연결 -->
     <script src="js/lab1.js"></script>
 </body>
 </html>
