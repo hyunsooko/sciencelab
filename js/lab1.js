@@ -1,5 +1,5 @@
 /* ==========================================================
-   Lab1.js: 별의 온도와 색깔 실험 스크립트 (수정 완료)
+   Lab1.js: 별의 온도와 색깔 실험 스크립트
 ========================================================== */
 
 const STAR_DATA = [
@@ -46,7 +46,7 @@ const starLabel = document.querySelector("#starLabel");
 const starDescription = document.querySelector("#starDescription");
 const discoveryText = document.querySelector("#discoveryText");
 
-// 온도에 맞는 대표 별 정보 찾기
+// 온도 범위에 해당하는 별 데이터 찾기
 function getCurrentStar(temp) {
     for (const s of STAR_DATA) {
         if (temp >= s.min && temp <= s.max) {
@@ -56,7 +56,7 @@ function getCurrentStar(temp) {
     return STAR_DATA[0];
 }
 
-// 두 색상 사이 비율 t 보간 계산
+// 색상 보간 계산 함수
 function interpolateColor(c1, c2, t) {
     const c1Num = parseInt(c1.slice(1), 16);
     const c2Num = parseInt(c2.slice(1), 16);
@@ -68,7 +68,7 @@ function interpolateColor(c1, c2, t) {
     return `rgb(${r}, ${g}, ${b})`;
 }
 
-// 온도별 연속 색상 보간
+// 온도별 연속적인 색상 변화 반환
 function getStarColor(temp) {
     const points = [
         { t: 3500,  c: "#EF4444" },  // 적색
@@ -89,8 +89,8 @@ function getStarColor(temp) {
     return points[points.length - 1].c;
 }
 
-// 별 그래픽 렌더링
-function renderStar(currentStar) {
+// 별 시각 요소 렌더링
+function renderStar() {
     const temp = Number(slider.value);
     const color = getStarColor(temp);
     if (star) {
@@ -103,7 +103,7 @@ function renderStar(currentStar) {
     }
 }
 
-// 텍스트 정보 렌더링
+// 정보 텍스트 렌더링
 function renderInfo(currentStar) {
     if (starName) starName.textContent = currentStar.name;
     if (starDisplayName) starDisplayName.textContent = currentStar.name;
@@ -113,25 +113,12 @@ function renderInfo(currentStar) {
     if (starDescription) starDescription.textContent = currentStar.description;
 }
 
-// 표(Table) 하이라이트 렌더링
-function renderTable(currentStar) {
-    const rows = document.querySelectorAll(".temperature-table tbody tr");
-    rows.forEach(row => {
-        const rowType = row.getAttribute("data-type");
-        if (rowType === currentStar.type) {
-            row.classList.add("active");
-        } else {
-            row.classList.remove("active");
-        }
-    });
-}
-
-// 발견 카드 렌더링
+// 오늘의 발견 텍스트 렌더링
 function renderDiscovery(currentStar) {
     if (discoveryText) discoveryText.textContent = currentStar.discovery;
 }
 
-// 전체 실험 상태 업데이트
+// 실험 상태 전체 업데이트
 function updateExperiment() {
     if (!slider) return;
     const temp = Number(slider.value);
@@ -141,13 +128,12 @@ function updateExperiment() {
 
     const currentStar = getCurrentStar(temp);
 
-    renderStar(currentStar);
+    renderStar();
     renderInfo(currentStar);
-    renderTable(currentStar);
     renderDiscovery(currentStar);
 }
 
-// 스냅 포인트 처리
+// 대표 온도 스냅 기능
 const SNAP_POINTS = [3500, 4500, 5800, 6700, 9500, 18000, 30000];
 function handleSnap() {
     if (!slider) return;
@@ -167,13 +153,12 @@ function handleSnap() {
     updateExperiment();
 }
 
-// 실험실 초기화
+// 초기화
 function initLab1() {
     if (!slider) return;
     slider.addEventListener("input", updateExperiment);
     slider.addEventListener("change", handleSnap);
-    updateExperiment(); // 초기 렌더링
+    updateExperiment();
 }
 
-// DOM 로드 후 실행
 document.addEventListener("DOMContentLoaded", initLab1);
