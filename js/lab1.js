@@ -33,7 +33,6 @@ const STAR_DATA = [
     }
 ];
 
-// 중2 교육과정 맞춤 오개념 FAQ 데이터 세트
 const MISCONCEPTION_DATA = [
     {
         question: "붉은색 별은 뜨겁고, 푸른색 별은 차갑지 않나요?",
@@ -61,7 +60,6 @@ const MISCONCEPTION_DATA = [
     }
 ];
 
-// DOM 요소
 const slider = document.querySelector("#temperatureSlider");
 const temperatureValue = document.querySelector("#temperatureValue");
 const star = document.querySelector("#star");
@@ -145,7 +143,7 @@ function renderDiscovery(currentStar) {
     if (discoveryText) discoveryText.textContent = currentStar.discovery;
 }
 
-// 🎲 오개념 랜덤 2개 추출 함수
+// ③ 묵직한 상자 카드 대신 리스트 형태로 HTML 주입
 function renderRandomFAQ() {
     if (!faqContainer) return;
 
@@ -153,8 +151,8 @@ function renderRandomFAQ() {
     const selected = shuffled.slice(0, 2);
 
     faqContainer.innerHTML = selected.map(item => `
-        <div class="faq-item-card">
-            <h4>${item.question}</h4>
+        <div class="faq-item">
+            <h4>💡 ${item.question}</h4>
             <p>${item.answer}</p>
         </div>
     `).join('');
@@ -204,7 +202,6 @@ function initLab1() {
     renderRandomFAQ();
 }
 
-// 안전하게 DOM 로드 시점 및 즉시 실행 보장
 if (document.readyState === 'loading') {
     document.addEventListener("DOMContentLoaded", initLab1);
 } else {
