@@ -118,31 +118,42 @@ body{
 
 
 /* ===================================
-   3. CONTAINER & GRID (메인 가로 1열 레이아웃)
+/* ===================================
+   3. CONTAINER & GRID (메인 3열 카드 레이아웃)
 =================================== */
 
 .container{
-    width:min(1100px, 92%);
-    margin:70px auto;
-    /* 작은 화면에서 카드가 찌그러지지 않고 가로 스크롤되도록 설정 */
-    overflow-x: auto; 
+    width: min(1200px, 94%); /* 1100px -> 1200px로 조금 더 넓혀서 사각형 비율 확보 */
+    margin: 60px auto;
 }
 
 .container h2{
-    text-align:center;
-    font-size:2rem;
-    margin-bottom:40px;
+    text-align: center;
+    font-size: 2rem;
+    margin-bottom: 40px;
 }
 
-/* 메인 페이지 전용 카드 그리드 레이아웃 (가로 1열 3개 고정) */
-#main-page .lab-grid {
+/* 메인 페이지 실험 카드 그리드: PC에서는 가로 3개 사각형 균등 배치 */
+.lab-grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr) !important; /* 무조건 가로 3등분 고정 */
+    grid-template-columns: repeat(3, 1fr); /* 무조건 가로 3열 */
     gap: 24px;
     width: 100%;
-    min-width: 800px; /* 모바일 등 작은 화면에서의 레이아웃 파괴 방지 */
 }
 
+/* 태블릿 화면 (화면 너비 1024px 이하일 때 2열로 자동 정렬) */
+@media (max-width: 1024px) {
+    .lab-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+/* 모바일 스마트폰 화면 (화면 너비 640px 이하일 때 1열) */
+@media (max-width: 640px) {
+    .lab-grid {
+        grid-template-columns: 1fr;
+    }
+}
 
 /* ===================================
    4. CARD (실험 카드 디자인)
