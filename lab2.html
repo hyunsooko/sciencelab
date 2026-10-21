@@ -56,22 +56,49 @@
                 </div>
             </div>
 
-      <!-- 등급 조절 슬라이더 (위치 정밀 일치 보정) -->
-            <div class="space-y-3 bg-slate-900/60 p-6 rounded-2xl border border-slate-800">
-                <!-- 1~6등급 라벨을 5등분 그리드로 정확한 커서 멈춤 위치에 배치 -->
-                <div class="relative w-full text-xs font-mono select-none" style="padding: 0 10px;">
-                    <div class="grid grid-cols-5 text-center text-slate-400">
-                        <span class="text-left cursor-pointer hover:text-amber-300" onclick="setGrade(1)">1 등급<br><span class="text-[10px] text-slate-500">(가장 밝음)</span></span>
-                        <span class="cursor-pointer hover:text-amber-300" onclick="setGrade(2)">2 등급</span>
-                        <span class="cursor-pointer hover:text-amber-300" onclick="setGrade(3)">3 등급</span>
-                        <span class="cursor-pointer hover:text-amber-300" onclick="setGrade(4)">4 등급</span>
-                        <span class="cursor-pointer hover:text-amber-300" onclick="setGrade(5)">5 등급</span>
+ <!-- 등급 조절 슬라이더 (수학적 절대 좌표로 1:1 칼정렬) -->
+            <div class="space-y-4 bg-slate-900/60 p-6 rounded-2xl border border-slate-800">
+                <!-- 슬라이더 Thumb 중심점(8px)에 맞춘 라벨 컨테이너 -->
+                <div class="relative w-full h-10 select-none">
+                    <!-- 1등급 (0%) -->
+                    <div onclick="setGrade(1)" class="absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 0);">
+                        <span class="text-xs font-mono font-bold text-slate-400 group-hover:text-amber-300 block">1 등급</span>
+                        <span class="text-[10px] text-slate-500 block -mt-1">(가장 밝음)</span>
                     </div>
-                    <!-- 6등급은 가장 우측 끝에 정확히 정렬 -->
-                    <span class="absolute right-[10px] top-0 text-right cursor-pointer hover:text-amber-300 text-slate-400" onclick="setGrade(6)">
-                        6 등급<br><span class="text-[10px] text-slate-500">(가장 어두움)</span>
-                    </span>
+
+                    <!-- 2등급 (20%) -->
+                    <div onclick="setGrade(2)" class="absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 0.2);">
+                        <span class="text-xs font-mono font-bold text-slate-400 group-hover:text-amber-300 block">2 등급</span>
+                    </div>
+
+                    <!-- 3등급 (40%) -->
+                    <div onclick="setGrade(3)" class="absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 0.4);">
+                        <span class="text-xs font-mono font-bold text-slate-400 group-hover:text-amber-300 block">3 등급</span>
+                    </div>
+
+                    <!-- 4등급 (60%) -->
+                    <div onclick="setGrade(4)" class="absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 0.6);">
+                        <span class="text-xs font-mono font-bold text-slate-400 group-hover:text-amber-300 block">4 등급</span>
+                    </div>
+
+                    <!-- 5등급 (80%) -->
+                    <div onclick="setGrade(5)" class="absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 0.8);">
+                        <span class="text-xs font-mono font-bold text-slate-400 group-hover:text-amber-300 block">5 등급</span>
+                    </div>
+
+                    <!-- 6등급 (100%) -->
+                    <div onclick="setGrade(6)" class="absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 1.0);">
+                        <span class="text-xs font-mono font-bold text-slate-400 group-hover:text-amber-300 block">6 등급</span>
+                        <span class="text-[10px] text-slate-500 block -mt-1">(가장 어두움)</span>
+                    </div>
                 </div>
+
+                <!-- 슬라이더 본체 -->
+                <div class="relative w-full">
+                    <input type="range" id="grade-slider" min="1" max="6" step="1" value="4" 
+                           class="w-full h-2.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-400 block m-0">
+                </div>
+            </div>
 
                 <!-- 슬라이더 트랙 및 틱마크 보정 -->
                 <div class="px-[10px]">
