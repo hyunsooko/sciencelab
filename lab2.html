@@ -120,15 +120,15 @@
             </div>
         </section>
 
-        <!-- 섹션 2: 겉보기 등급 vs 절대 등급 (10pc 기준 인터랙티브 다이어그램) -->
+      <!-- 섹션 2: 겉보기 등급 vs 절대 등급 (직접 드래그 인터랙션) -->
         <section class="glass-panel p-6 md:p-8 rounded-3xl space-y-6">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-cyan-400 flex items-center">
-                        <i class="fas fa-arrows-split-up-and-left mr-2"></i> 2. 겉보기 등급 vs 절대 등급 (10 pc 기준 비교)
+                        <i class="fas fa-hand-pointer mr-2 animate-bounce"></i> 2. 겉보기 등급 vs 절대 등급 (별을 직접 드래그해 보세요!)
                     </h2>
                     <p class="text-sm text-slate-400 mt-1">
-                        <strong>겉보기 등급($m$)</strong>은 우리 눈에 보이는 밝기, <strong>절대 등급($M$)</strong>은 모든 별을 <strong>10 pc 거리</strong>에 나란히 놓았을 때의 진짜 고유 밝기입니다.
+                        별을 직접 <strong>클릭 & 드래그</strong>해서 10 pc 노란 점선 위치로 이동시켜 보세요. 10 pc에 가까워지면 자석처럼 달라붙습니다.
                     </p>
                 </div>
                 <!-- 별 선택 토글 탭 -->
@@ -144,9 +144,9 @@
 
             <!-- 시각화 영역: 다이어그램과 상태 설명 패널 -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <!-- SVG 우주 다이어그램 (교과서 그림 구현) -->
-                <div class="lg:col-span-2 bg-slate-950 rounded-2xl border border-slate-800 p-4 relative min-h-[420px] flex items-center justify-center overflow-hidden">
-                    <svg id="universe-svg" class="w-full h-[380px]" viewBox="0 0 650 380">
+                <!-- SVG 우주 다이어그램 -->
+                <div class="lg:col-span-2 bg-slate-950 rounded-2xl border border-slate-800 p-4 relative min-h-[440px] flex items-center justify-center overflow-hidden select-none">
+                    <svg id="universe-svg" class="w-full h-[400px] cursor-default" viewBox="0 0 650 400">
                         <defs>
                             <radialGradient id="earth-glow" cx="50%" cy="50%" r="50%">
                                 <stop offset="0%" stop-color="#38bdf8" />
@@ -164,8 +164,8 @@
                             </radialGradient>
                         </defs>
 
-                        <!-- 배경 은하수 별가루 효과 -->
-                        <g opacity="0.3">
+                        <!-- 배경 은하수 별가루 -->
+                        <g opacity="0.25">
                             <circle cx="50" cy="80" r="1" fill="#fff" />
                             <circle cx="150" cy="40" r="1.5" fill="#fff" />
                             <circle cx="280" cy="120" r="1" fill="#fff" />
@@ -175,82 +175,52 @@
                             <circle cx="520" cy="320" r="1.5" fill="#fff" />
                         </g>
 
-                        <!-- 10 pc 기준 원호 (반지름 R = 230, 중심: 지구 220, 310) -->
-                        <path d="M 50 170 A 230 230 0 0 1 450 310" fill="none" stroke="#facc15" stroke-width="2" stroke-dasharray="6 6" />
-                        <text x="360" y="270" fill="#facc15" font-size="13" font-weight="extrabold">10 pc 기준선</text>
+                        <!-- 10 pc 기준 원호 (지구 240, 320 기준 반경 R = 230) -->
+                        <path d="M 70 180 A 230 230 0 0 1 470 320" fill="none" stroke="#facc15" stroke-width="2.5" stroke-dasharray="6 6" />
+                        <text x="390" y="275" fill="#facc15" font-size="13" font-weight="extrabold">10 pc 기준선</text>
 
-                        <!-- 지구 (원점: 220, 310) -->
-                        <g transform="translate(220, 310)">
-                            <circle cx="0" cy="0" r="28" fill="url(#earth-glow)" opacity="0.5" />
+                        <!-- 관측 경로 보조 점선 -->
+                        <line id="guide-line" x1="240" y1="320" x2="240" y2="60" stroke="rgba(148, 163, 184, 0.3)" stroke-width="2" stroke-dasharray="4 4" />
+
+                        <!-- 지구 (원점: 240, 320) -->
+                        <g transform="translate(240, 320)">
+                            <circle cx="0" cy="0" r="28" fill="url(#earth-glow)" opacity="0.4" />
                             <circle cx="0" cy="0" r="16" fill="#1d4ed8" stroke="#38bdf8" stroke-width="2" />
                             <text x="0" y="4" font-size="10" fill="#ffffff" font-weight="bold" text-anchor="middle">지구</text>
-                            <text x="0" y="28" font-size="11" fill="#94a3b8" text-anchor="middle">관측자</text>
+                            <text x="0" y="30" font-size="11" fill="#94a3b8" text-anchor="middle">관측자</text>
                         </g>
 
-                        <!-- 지구에서 10pc까지의 노란 양방향 화살표 -->
-                        <line x1="240" y1="310" x2="445" y2="310" stroke="#facc15" stroke-width="2" marker-end="url(#arrow)" />
-                        <text x="340" y="330" fill="#facc15" font-size="12" font-weight="bold" text-anchor="middle">10 pc</text>
+                        <!-- 지구에서 10pc까지의 노란 거리선 -->
+                        <line x1="260" y1="320" x2="465" y2="320" stroke="#facc15" stroke-width="2" />
+                        <text x="365" y="340" fill="#facc15" font-size="12" font-weight="bold" text-anchor="middle">10 pc</text>
 
-                        <!-- 시리우스 관측 궤적 및 별 -->
-                        <g id="group-sirius">
-                            <!-- 지구 -> 실제 위치(2.6pc) -> 10pc 연장선 -->
-                            <line x1="220" y1="310" x2="220" y2="80" stroke="rgba(147, 197, 253, 0.4)" stroke-width="1.5" stroke-dasharray="3 3" />
-                            
-                            <!-- 2.6pc 위치 (겉보기 고정 표식) -->
-                            <circle cx="220" cy="220" r="14" fill="rgba(255,255,255,0.15)" stroke="#60a5fa" stroke-width="1" stroke-dasharray="2 2" />
-                            <text x="170" y="224" font-size="11" fill="#93c5fd" font-weight="bold" text-anchor="end">실제 위치 (2.6pc)</text>
-                            
-                            <!-- 10pc 위치 (절대등급 고정 표식) -->
-                            <circle cx="220" cy="80" r="10" fill="rgba(255,255,255,0.15)" stroke="#facc15" stroke-width="1" stroke-dasharray="2 2" />
-                            <text x="170" y="84" font-size="11" fill="#facc15" font-weight="bold" text-anchor="end">10pc 위치</text>
+                        <!-- 고정 위치 가이드 마커 -->
+                        <g id="fixed-markers">
+                            <!-- 10 pc 정점 타겟 -->
+                            <circle id="target-10pc-marker" cx="240" cy="90" r="18" fill="none" stroke="#facc15" stroke-width="2" stroke-dasharray="3 3" opacity="0.6" />
+                            <text id="target-10pc-text" x="240" y="65" font-size="11" fill="#facc15" font-weight="bold" text-anchor="middle">10 pc 위치 (절대 등급)</text>
 
-                            <!-- 이동 화살표 (2.6pc -> 10pc 뒤로 보냄) -->
-                            <line x1="220" y1="190" x2="220" y2="110" stroke="#38bdf8" stroke-width="3" />
-                            <polygon points="215,115 220,100 225,115" fill="#38bdf8" />
-                            <text x="232" y="155" font-size="11" fill="#38bdf8" font-weight="bold">뒤로 이동(어두워짐)</text>
-
-                            <!-- 움직이는 시리우스 별 오브젝트 -->
-                            <g id="star-obj-sirius" class="star-transition" transform="translate(220, 220)">
-                                <circle cx="0" cy="0" r="26" fill="url(#sirius-glow)" />
-                                <circle id="sirius-core" cx="0" cy="0" r="12" fill="#ffffff" />
-                                <text id="sirius-tag" x="0" y="-30" font-size="12" fill="#ffffff" font-weight="extrabold" text-anchor="middle">겉보기: -1.5 등급</text>
-                            </g>
+                            <!-- 원래 실제 위치 마커 -->
+                            <circle id="real-pos-marker" cx="240" cy="240" r="12" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.5" />
+                            <text id="real-pos-text" x="180" y="245" font-size="11" fill="#38bdf8" font-weight="bold" text-anchor="end">실제 위치 (2.6 pc)</text>
                         </g>
 
-                        <!-- 베텔게우스 관측 궤적 및 별 -->
-                        <g id="group-betelgeuse" class="hidden">
-                            <!-- 지구 -> 10pc -> 실제 위치(약 168pc) 방향 연장선 -->
-                            <line x1="220" y1="310" x2="560" y2="90" stroke="rgba(248, 113, 113, 0.4)" stroke-width="1.5" stroke-dasharray="3 3" />
-
-                            <!-- 실제 위치 (겉보기 고정 표식) -->
-                            <circle cx="560" cy="90" r="12" fill="rgba(239, 68, 68, 0.15)" stroke="#f87171" stroke-width="1" stroke-dasharray="2 2" />
-                            <text x="560" y="60" font-size="11" fill="#f87171" font-weight="bold" text-anchor="middle">실제 위치 (10pc보다 훨씬 멂)</text>
-
-                            <!-- 10pc 위치 (절대등급 고정 표식) -->
-                            <circle cx="370" cy="210" r="24" fill="rgba(239, 68, 68, 0.15)" stroke="#facc15" stroke-width="1" stroke-dasharray="2 2" />
-                            <text x="430" y="240" font-size="11" fill="#facc15" font-weight="bold">10pc 위치</text>
-
-                            <!-- 이동 화살표 (실제 먼 위치 -> 10pc 앞으로 당김) -->
-                            <line x1="530" y1="110" x2="410" y2="185" stroke="#38bdf8" stroke-width="3" />
-                            <polygon points="415,175 398,193 423,188" fill="#38bdf8" />
-                            <text x="490" y="165" font-size="11" fill="#38bdf8" font-weight="bold">앞으로 당김(훨씬 밝아짐)</text>
-
-                            <!-- 움직이는 베텔게우스 별 오브젝트 -->
-                            <g id="star-obj-betel" class="star-transition" transform="translate(560, 90)">
-                                <circle id="betel-glow-circle" cx="0" cy="0" r="22" fill="url(#betel-glow)" />
-                                <circle id="betel-core" cx="0" cy="0" r="10" fill="#ef4444" />
-                                <text id="betel-tag" x="0" y="-26" font-size="12" fill="#ffedd5" font-weight="extrabold" text-anchor="middle">겉보기: 0.6 등급</text>
-                            </g>
+                        <!-- 드래그 가능한 별 오브젝트 -->
+                        <g id="draggable-star" transform="translate(240, 240)" class="cursor-grab active:cursor-grabbing">
+                            <circle id="drag-glow" cx="0" cy="0" r="30" fill="url(#sirius-glow)" opacity="0.8" />
+                            <circle id="drag-core" cx="0" cy="0" r="14" fill="#ffffff" stroke="rgba(255,255,255,0.8)" stroke-width="2" />
+                            <text id="drag-tag" x="0" y="-36" font-size="12" fill="#ffffff" font-weight="extrabold" text-anchor="middle">시리우스 (드래그 가능)</text>
+                            <text id="drag-subtag" x="0" y="-20" font-size="11" fill="#38bdf8" font-weight="bold" text-anchor="middle">현재 겉보기: -1.5 등급</text>
                         </g>
                     </svg>
 
-                    <!-- 위치 이동 토글 버튼 (다이어그램 내부 하단) -->
+                    <!-- 빠른 프리셋 버튼 (다이어그램 우측 하단) -->
                     <div class="absolute bottom-4 right-4 flex gap-2">
-                        <button onclick="toggleStarDistance('real')" id="pos-btn-real" class="px-3.5 py-1.5 bg-slate-800 text-cyan-300 border border-cyan-500 rounded-xl text-xs font-bold transition">
-                            <i class="fas fa-eye mr-1"></i> 실제 위치 (겉보기 등급)
+                        <button onclick="snapToPosition('real')" class="px-3 py-1.5 bg-slate-900/90 text-slate-300 border border-slate-700 hover:border-cyan-400 rounded-xl text-xs font-bold transition">
+                            실제 위치로 복귀
                         </button>
-                        <button onclick="toggleStarDistance('10pc')" id="pos-btn-10pc" class="px-3.5 py-1.5 bg-slate-900 text-slate-400 border border-slate-700 rounded-xl text-xs font-bold transition hover:text-white">
-                            <i class="fas fa-ruler-combined mr-1"></i> 10 pc 위치 (절대 등급)
+                        <button onclick="snapToPosition('10pc')" class="px-3 py-1.5 bg-amber-950/80 text-amber-300 border border-amber-500/60 hover:bg-amber-900/80 rounded-xl text-xs font-bold transition">
+                            10 pc 선으로 즉시 이동
                         </button>
                     </div>
                 </div>
@@ -263,29 +233,28 @@
                         </span>
                         <h3 id="star-detail-title" class="text-xl font-bold text-white mb-2">시리우스 (Sirius)</h3>
                         <p id="star-detail-desc" class="text-xs text-slate-300 leading-relaxed">
-                            시리우스는 지구로부터 약 <strong>2.6 pc</strong> 떨어져 있어 10 pc보다 가깝습니다. 
-                            10 pc 위치로 강제로 밀어내면 별이 멀어지므로 <strong>더 어두워져서 등급 숫자가 커집니다</strong>!
+                            별을 <strong>위로 드래그하여 10 pc 점선</strong>에 놓아보세요. 지구에서 멀어지면서 점점 어두워지고 등급 숫자가 커지는 것을 확인할 수 있습니다.
                         </p>
                     </div>
 
-                    <!-- 등급 비교 박스 -->
+                    <!-- 등급 및 거리 상태 실시간 계산 박스 -->
                     <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 space-y-2 font-mono text-sm">
                         <div class="flex justify-between items-center">
-                            <span class="text-slate-400 text-xs">겉보기 등급 (m):</span>
-                            <span id="display-app-mag" class="font-bold text-white">-1.5 등급</span>
+                            <span class="text-slate-400 text-xs">현재 위치 상태:</span>
+                            <span id="current-pos-status" class="font-bold text-cyan-300">실제 위치 (2.6 pc)</span>
                         </div>
                         <div class="flex justify-between items-center">
-                            <span class="text-slate-400 text-xs">절대 등급 (M):</span>
-                            <span id="display-abs-mag" class="font-bold text-amber-400">+1.4 등급</span>
+                            <span class="text-slate-400 text-xs">현재 보이는 밝기:</span>
+                            <span id="current-mag-status" class="font-bold text-white">-1.5 등급</span>
                         </div>
                         <div class="border-t border-slate-800 pt-2 flex justify-between items-center">
-                            <span class="text-xs text-cyan-400 font-bold">거리 지수 (m - M):</span>
-                            <span id="display-dist-mod" class="font-bold text-cyan-400">-2.9 (음수: 10pc 이내)</span>
+                            <span class="text-xs text-amber-400 font-bold">10 pc 기준 절대 등급:</span>
+                            <span id="display-abs-mag" class="font-bold text-amber-400">+1.4 등급</span>
                         </div>
                     </div>
 
-                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/60 text-[11px] text-slate-400">
-                        💡 <strong>핵심 공식:</strong> $m - M < 0$ 이면 10 pc보다 가까움, $m - M > 0$ 이면 10 pc보다 먼 별!
+                    <div id="distance-indicator-box" class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
+                        📍 <strong>10 pc 스냅 안내:</strong> 별을 드래그해서 노란 점선 근처에 놓으면 자동으로 '10 pc 절대 등급' 위치에 자석처럼 맞춰집니다.
                     </div>
                 </div>
             </div>
