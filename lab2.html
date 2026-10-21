@@ -205,12 +205,15 @@
                             <text id="real-pos-text" x="180" y="245" font-size="11" fill="#38bdf8" font-weight="bold" text-anchor="end">실제 위치 (2.6 pc)</text>
                         </g>
 
-                        <!-- 드래그 가능한 별 오브젝트 -->
-                        <g id="draggable-star" transform="translate(240, 240)" class="cursor-grab active:cursor-grabbing">
-                            <circle id="drag-glow" cx="0" cy="0" r="30" fill="url(#sirius-glow)" opacity="0.8" />
-                            <circle id="drag-core" cx="0" cy="0" r="14" fill="#ffffff" stroke="rgba(255,255,255,0.8)" stroke-width="2" />
-                            <text id="drag-tag" x="0" y="-36" font-size="12" fill="#ffffff" font-weight="extrabold" text-anchor="middle">시리우스 (드래그 가능)</text>
-                            <text id="drag-subtag" x="0" y="-20" font-size="11" fill="#38bdf8" font-weight="bold" text-anchor="middle">현재 겉보기: -1.5 등급</text>
+                       <!-- 드래그 가능한 별 오브젝트 (터치 영역 대폭 확대 및 이벤트 활성화) -->
+                        <g id="draggable-star" transform="translate(240, 240)" style="cursor: grab; touch-action: none;">
+                            <!-- 손가락/마우스로 쉽게 잡을 수 있는 투명 터치 패드 (반지름 40px) -->
+                            <circle cx="0" cy="0" r="40" fill="transparent" style="cursor: grab;" />
+                            
+                            <circle id="drag-glow" cx="0" cy="0" r="30" fill="url(#sirius-glow)" opacity="0.8" style="pointer-events: none;" />
+                            <circle id="drag-core" cx="0" cy="0" r="14" fill="#ffffff" stroke="rgba(255,255,255,0.8)" stroke-width="2" style="pointer-events: none;" />
+                            <text id="drag-tag" x="0" y="-36" font-size="12" fill="#ffffff" font-weight="extrabold" text-anchor="middle" style="pointer-events: none; user-select: none;">시리우스 (드래그 가능)</text>
+                            <text id="drag-subtag" x="0" y="-20" font-size="11" fill="#38bdf8" font-weight="bold" text-anchor="middle" style="pointer-events: none; user-select: none;">현재 겉보기: -1.5 등급</text>
                         </g>
                     </svg>
 
@@ -515,6 +518,63 @@
         // 초기화 로드
         updateGradeLab(1);
         renderRandomQuizzes();
+      // ==========================================================
+        // 드래그 & 터치 이동 엔진 (SVG 10pc 연동)
+        // ==========================================================
+        const starDragTarget = document.getElementById('draggable-star');
+        const svgCanvas = document.getElementById('universe-svg');
+        let isStarDragging = false;
+
+        function getCanvasCoordinates(evt) {
+            const rect = svgCanvas.getBoundingClientRect();
+            const clientX = evt.clientX || (evt.touches && evt.touches[0].clientX);
+            const clientY = evt.clientY || (evt.touches && evt.touches[0].clientY);
+            const scaleX = 650 / rect.width;
+            const scaleY = 400 / rect.height;
+
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
+            };
+        }
+
+        function startStarDrag(e) {
+            isStarDragging = true;
+            if (starDragTarget) starDragTarget.style.cursor = 'grabbing';
+            if (e.cancelable) e.preventDefault();
+        }
+
+        function moveStarDrag(e) {
+            if (!isStarDragging) return;
+            const pt = getCanvasCoordinates(e);
+            const conf = starConfig[currentStar];
+
+            const dx = pt.x - earthX;
+            const dy = pt.y - earthY;
+            const projectedR = dx * Math.cos(conf.angle) + dy * Math.sin(conf.angle);
+
+            // 이동 범위 제한 (60px ~ 360px)
+            const clampedR = Math.max(60, Math.min(360, projectedR));
+            updateStarPosition(clampedR);
+        }
+
+        function stopStarDrag() {
+            if (isStarDragging) {
+                isStarDragging = false;
+                if (starDragTarget) starDragTarget.style.cursor = 'grab';
+            }
+        }
+
+        if (starDragTarget) {
+            starDragTarget.addEventListener('pointerdown', startStarDrag);
+            starDragTarget.addEventListener('touchstart', startStarDrag, { passive: false });
+        }
+
+        window.addEventListener('pointermove', moveStarDrag);
+        window.addEventListener('touchmove', moveStarDrag, { passive: true });
+        window.addEventListener('pointerup', stopStarDrag);
+        window.addEventListener('pointercancel', stopStarDrag);
+        window.addEventListener('touchend', stopStarDrag);  
     </script>
 </body>
 </html>
