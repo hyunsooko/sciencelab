@@ -56,18 +56,28 @@
                 </div>
             </div>
 
-            <!-- 등급 조절 슬라이더 -->
-            <div class="space-y-2 bg-slate-900/60 p-5 rounded-2xl border border-slate-800">
-                <div class="flex justify-between items-center text-xs font-mono text-slate-400">
-                    <span>1 등급 (가장 밝음)</span>
-                    <span>2 등급</span>
-                    <span>3 등급</span>
-                    <span>4 등급</span>
-                    <span>5 등급</span>
-                    <span>6 등급 (가장 어두움)</span>
+      <!-- 등급 조절 슬라이더 (위치 정밀 일치 보정) -->
+            <div class="space-y-3 bg-slate-900/60 p-6 rounded-2xl border border-slate-800">
+                <!-- 1~6등급 라벨을 5등분 그리드로 정확한 커서 멈춤 위치에 배치 -->
+                <div class="relative w-full text-xs font-mono select-none" style="padding: 0 10px;">
+                    <div class="grid grid-cols-5 text-center text-slate-400">
+                        <span class="text-left cursor-pointer hover:text-amber-300" onclick="setGrade(1)">1 등급<br><span class="text-[10px] text-slate-500">(가장 밝음)</span></span>
+                        <span class="cursor-pointer hover:text-amber-300" onclick="setGrade(2)">2 등급</span>
+                        <span class="cursor-pointer hover:text-amber-300" onclick="setGrade(3)">3 등급</span>
+                        <span class="cursor-pointer hover:text-amber-300" onclick="setGrade(4)">4 등급</span>
+                        <span class="cursor-pointer hover:text-amber-300" onclick="setGrade(5)">5 등급</span>
+                    </div>
+                    <!-- 6등급은 가장 우측 끝에 정확히 정렬 -->
+                    <span class="absolute right-[10px] top-0 text-right cursor-pointer hover:text-amber-300 text-slate-400" onclick="setGrade(6)">
+                        6 등급<br><span class="text-[10px] text-slate-500">(가장 어두움)</span>
+                    </span>
                 </div>
-                <input type="range" id="grade-slider" min="1" max="6" step="1" value="1" 
-                       class="w-full h-2.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-400">
+
+                <!-- 슬라이더 트랙 및 틱마크 보정 -->
+                <div class="px-[10px]">
+                    <input type="range" id="grade-slider" min="1" max="6" step="1" value="2" 
+                           class="w-full h-2.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-400">
+                </div>
             </div>
 
             <!-- 전구 시각화 & 상대적 밝기 디스플레이 -->
