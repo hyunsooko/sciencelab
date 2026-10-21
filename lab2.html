@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab 2. 별의 밝기와 등급 - 우주 탐구 실험실</title>
+    <!-- Tailwind CSS CDN 및 FontAwesome 아이콘 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background-color: #0b0f19;
+            color: #f8fafc;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        }
+        .glass-panel {
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(51, 65, 85, 0.4);
+        }
+        /* 별의 부드러운 위치 이동 애니메이션 */
+        .star-transition {
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+    </style>
+</head>
+<body class="p-4 md:p-8 min-h-screen">
+    <div class="max-w-6xl mx-auto space-y-8">
+        
+        <!-- 상단 헤더 & 돌아가기 버튼 -->
+        <header class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <div>
+                <a href="index.html" class="inline-flex items-center text-sm text-cyan-400 hover:text-cyan-300 font-semibold mb-2 transition">
+                    <i class="fas fa-arrow-left mr-2"></i> 가상 실험실 목록으로
+                </a>
+                <h1 class="text-2xl md:text-3xl font-extrabold text-white tracking-tight">Lab 2. 별의 밝기와 등급</h1>
+            </div>
+            <span class="px-3 py-1 bg-amber-950/60 border border-amber-800/60 text-amber-400 text-xs font-bold rounded-full">중3 과학 천체</span>
+        </header>
+
+        <!-- 섹션 1: 등급과 밝기 관계 (전구 시뮬레이션) -->
+        <section class="glass-panel p-6 md:p-8 rounded-3xl space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-amber-400 flex items-center">
+                        <i class="fas fa-lightbulb mr-2"></i> 1. 별의 등급과 밝기 (전구 비교)
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">
+                        <strong>등급 숫자가 작을수록(음수일수록) 더 밝은 별</strong>입니다. 1등급 차이는 약 <strong>2.5배</strong>, 5등급 차이는 <strong>100배</strong> 밝기 차이가 납니다!
+                    </p>
+                </div>
+                <div class="bg-slate-900/90 px-5 py-3 rounded-2xl border border-slate-800 text-center shrink-0">
+                    <span class="text-xs text-slate-400 block font-bold">현재 선택 등급</span>
+                    <span id="grade-badge" class="text-2xl font-black text-amber-300 font-mono">1 등급</span>
+                </div>
+            </div>
+
+            <!-- 등급 조절 슬라이더 -->
+            <div class="space-y-2 bg-slate-900/60 p-5 rounded-2xl border border-slate-800">
+                <div class="flex justify-between items-center text-xs font-mono text-slate-400">
+                    <span>1 등급 (가장 밝음)</span>
+                    <span>2 등급</span>
+                    <span>3 등급</span>
+                    <span>4 등급</span>
+                    <span>5 등급</span>
+                    <span>6 등급 (가장 어두움)</span>
+                </div>
+                <input type="range" id="grade-slider" min="1" max="6" step="1" value="1" 
+                       class="w-full h-2.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-400">
+            </div>
+
+            <!-- 전구 시각화 & 상대적 밝기 디스플레이 -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center bg-slate-950/80 p-6 rounded-2xl border border-slate-800">
+                <div class="md:col-span-2 space-y-3">
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs text-slate-400 font-bold">상대적 밝기 전구 개수 (6등급 = 전구 1개 기준)</span>
+                        <span id="lightbulb-count-text" class="text-sm font-bold text-amber-400 font-mono">약 100개 상당</span>
+                    </div>
+                    <!-- 전구들이 렌더링되는 영역 -->
+                    <div id="lightbulb-grid" class="flex flex-wrap gap-1.5 p-4 bg-slate-900/70 rounded-xl min-h-[90px] max-h-[140px] overflow-y-auto border border-slate-800/80">
+                        <!-- JS로 동적 생성 -->
+                    </div>
+                </div>
+                <div class="bg-slate-900/90 p-5 rounded-xl border border-amber-500/20 text-center space-y-1">
+                    <span class="text-xs text-slate-400 font-bold">6등급 별 대비 밝기 배율</span>
+                    <div id="brightness-ratio" class="text-3xl font-black text-amber-300 font-mono italic">100.0 배</div>
+                    <p class="text-[11px] text-slate-500">2.5^(6 - 등급)</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 섹션 2: 겉보기 등급 vs 절대 등급 (10pc 기준 인터랙티브 다이어그램) -->
+        <section class="glass-panel p-6 md:p-8 rounded-3xl space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h2 class="text-xl font-bold text-cyan-400 flex items-center">
+                        <i class="fas fa-arrows-split-up-and-left mr-2"></i> 2. 겉보기 등급 vs 절대 등급 (10 pc 기준 비교)
+                    </h2>
+                    <p class="text-sm text-slate-400 mt-1">
+                        <strong>겉보기 등급($m$)</strong>은 우리 눈에 보이는 밝기, <strong>절대 등급($M$)</strong>은 모든 별을 <strong>10 pc 거리</strong>에 나란히 놓았을 때의 진짜 고유 밝기입니다.
+                    </p>
+                </div>
+                <!-- 별 선택 토글 탭 -->
+                <div class="flex bg-slate-900 p-1.5 rounded-2xl border border-slate-800 shrink-0">
+                    <button onclick="selectStar('sirius')" id="btn-sirius" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-cyan-600 text-white shadow-lg">
+                        시리우스 (가까운 별)
+                    </button>
+                    <button onclick="selectStar('betelgeuse')" id="btn-betelgeuse" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white">
+                        베텔게우스 (먼 별)
+                    </button>
+                </div>
+            </div>
+
+            <!-- 시각화 영역: 다이어그램과 상태 설명 패널 -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                <!-- SVG 우주 다이어그램 (교과서 그림 구현) -->
+                <div class="lg:col-span-2 bg-slate-950 rounded-2xl border border-slate-800 p-4 relative min-h-[420px] flex items-center justify-center overflow-hidden">
+                    <svg id="universe-svg" class="w-full h-[380px]" viewBox="0 0 650 380">
+                        <defs>
+                            <radialGradient id="earth-glow" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#38bdf8" />
+                                <stop offset="100%" stop-color="transparent" />
+                            </radialGradient>
+                            <radialGradient id="sirius-glow" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#ffffff" />
+                                <stop offset="60%" stop-color="#93c5fd" />
+                                <stop offset="100%" stop-color="transparent" />
+                            </radialGradient>
+                            <radialGradient id="betel-glow" cx="50%" cy="50%" r="50%">
+                                <stop offset="0%" stop-color="#ffedd5" />
+                                <stop offset="50%" stop-color="#ef4444" />
+                                <stop offset="100%" stop-color="transparent" />
+                            </radialGradient>
+                        </defs>
+
+                        <!-- 배경 은하수 별가루 효과 -->
+                        <g opacity="0.3">
+                            <circle cx="50" cy="80" r="1" fill="#fff" />
+                            <circle cx="150" cy="40" r="1.5" fill="#fff" />
+                            <circle cx="280" cy="120" r="1" fill="#fff" />
+                            <circle cx="450" cy="60" r="1.2" fill="#fff" />
+                            <circle cx="580" cy="190" r="1" fill="#fff" />
+                            <circle cx="120" cy="300" r="1" fill="#fff" />
+                            <circle cx="520" cy="320" r="1.5" fill="#fff" />
+                        </g>
+
+                        <!-- 10 pc 기준 원호 (반지름 R = 230, 중심: 지구 220, 310) -->
+                        <path d="M 50 170 A 230 230 0 0 1 450 310" fill="none" stroke="#facc15" stroke-width="2" stroke-dasharray="6 6" />
+                        <text x="360" y="270" fill="#facc15" font-size="13" font-weight="extrabold">10 pc 기준선</text>
+
+                        <!-- 지구 (원점: 220, 310) -->
+                        <g transform="translate(220, 310)">
+                            <circle cx="0" cy="0" r="28" fill="url(#earth-glow)" opacity="0.5" />
+                            <circle cx="0" cy="0" r="16" fill="#1d4ed8" stroke="#38bdf8" stroke-width="2" />
+                            <text x="0" y="4" font-size="10" fill="#ffffff" font-weight="bold" text-anchor="middle">지구</text>
+                            <text x="0" y="28" font-size="11" fill="#94a3b8" text-anchor="middle">관측자</text>
+                        </g>
+
+                        <!-- 지구에서 10pc까지의 노란 양방향 화살표 -->
+                        <line x1="240" y1="310" x2="445" y2="310" stroke="#facc15" stroke-width="2" marker-end="url(#arrow)" />
+                        <text x="340" y="330" fill="#facc15" font-size="12" font-weight="bold" text-anchor="middle">10 pc</text>
+
+                        <!-- 시리우스 관측 궤적 및 별 -->
+                        <g id="group-sirius">
+                            <!-- 지구 -> 실제 위치(2.6pc) -> 10pc 연장선 -->
+                            <line x1="220" y1="310" x2="220" y2="80" stroke="rgba(147, 197, 253, 0.4)" stroke-width="1.5" stroke-dasharray="3 3" />
+                            
+                            <!-- 2.6pc 위치 (겉보기 고정 표식) -->
+                            <circle cx="220" cy="220" r="14" fill="rgba(255,255,255,0.15)" stroke="#60a5fa" stroke-width="1" stroke-dasharray="2 2" />
+                            <text x="170" y="224" font-size="11" fill="#93c5fd" font-weight="bold" text-anchor="end">실제 위치 (2.6pc)</text>
+                            
+                            <!-- 10pc 위치 (절대등급 고정 표식) -->
+                            <circle cx="220" cy="80" r="10" fill="rgba(255,255,255,0.15)" stroke="#facc15" stroke-width="1" stroke-dasharray="2 2" />
+                            <text x="170" y="84" font-size="11" fill="#facc15" font-weight="bold" text-anchor="end">10pc 위치</text>
+
+                            <!-- 이동 화살표 (2.6pc -> 10pc 뒤로 보냄) -->
+                            <line x1="220" y1="190" x2="220" y2="110" stroke="#38bdf8" stroke-width="3" />
+                            <polygon points="215,115 220,100 225,115" fill="#38bdf8" />
+                            <text x="232" y="155" font-size="11" fill="#38bdf8" font-weight="bold">뒤로 이동(어두워짐)</text>
+
+                            <!-- 움직이는 시리우스 별 오브젝트 -->
+                            <g id="star-obj-sirius" class="star-transition" transform="translate(220, 220)">
+                                <circle cx="0" cy="0" r="26" fill="url(#sirius-glow)" />
+                                <circle id="sirius-core" cx="0" cy="0" r="12" fill="#ffffff" />
+                                <text id="sirius-tag" x="0" y="-30" font-size="12" fill="#ffffff" font-weight="extrabold" text-anchor="middle">겉보기: -1.5 등급</text>
+                            </g>
+                        </g>
+
+                        <!-- 베텔게우스 관측 궤적 및 별 -->
+                        <g id="group-betelgeuse" class="hidden">
+                            <!-- 지구 -> 10pc -> 실제 위치(약 168pc) 방향 연장선 -->
+                            <line x1="220" y1="310" x2="560" y2="90" stroke="rgba(248, 113, 113, 0.4)" stroke-width="1.5" stroke-dasharray="3 3" />
+
+                            <!-- 실제 위치 (겉보기 고정 표식) -->
+                            <circle cx="560" cy="90" r="12" fill="rgba(239, 68, 68, 0.15)" stroke="#f87171" stroke-width="1" stroke-dasharray="2 2" />
+                            <text x="560" y="60" font-size="11" fill="#f87171" font-weight="bold" text-anchor="middle">실제 위치 (10pc보다 훨씬 멂)</text>
+
+                            <!-- 10pc 위치 (절대등급 고정 표식) -->
+                            <circle cx="370" cy="210" r="24" fill="rgba(239, 68, 68, 0.15)" stroke="#facc15" stroke-width="1" stroke-dasharray="2 2" />
+                            <text x="430" y="240" font-size="11" fill="#facc15" font-weight="bold">10pc 위치</text>
+
+                            <!-- 이동 화살표 (실제 먼 위치 -> 10pc 앞으로 당김) -->
+                            <line x1="530" y1="110" x2="410" y2="185" stroke="#38bdf8" stroke-width="3" />
+                            <polygon points="415,175 398,193 423,188" fill="#38bdf8" />
+                            <text x="490" y="165" font-size="11" fill="#38bdf8" font-weight="bold">앞으로 당김(훨씬 밝아짐)</text>
+
+                            <!-- 움직이는 베텔게우스 별 오브젝트 -->
+                            <g id="star-obj-betel" class="star-transition" transform="translate(560, 90)">
+                                <circle id="betel-glow-circle" cx="0" cy="0" r="22" fill="url(#betel-glow)" />
+                                <circle id="betel-core" cx="0" cy="0" r="10" fill="#ef4444" />
+                                <text id="betel-tag" x="0" y="-26" font-size="12" fill="#ffedd5" font-weight="extrabold" text-anchor="middle">겉보기: 0.6 등급</text>
+                            </g>
+                        </g>
+                    </svg>
+
+                    <!-- 위치 이동 토글 버튼 (다이어그램 내부 하단) -->
+                    <div class="absolute bottom-4 right-4 flex gap-2">
+                        <button onclick="toggleStarDistance('real')" id="pos-btn-real" class="px-3.5 py-1.5 bg-slate-800 text-cyan-300 border border-cyan-500 rounded-xl text-xs font-bold transition">
+                            <i class="fas fa-eye mr-1"></i> 실제 위치 (겉보기 등급)
+                        </button>
+                        <button onclick="toggleStarDistance('10pc')" id="pos-btn-10pc" class="px-3.5 py-1.5 bg-slate-900 text-slate-400 border border-slate-700 rounded-xl text-xs font-bold transition hover:text-white">
+                            <i class="fas fa-ruler-combined mr-1"></i> 10 pc 위치 (절대 등급)
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 상태 설명 및 과학 원리 카드 -->
+                <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between border border-slate-800 space-y-4">
+                    <div>
+                        <span id="star-status-pill" class="inline-block px-2.5 py-1 rounded-lg text-xs font-bold mb-2 bg-blue-500/10 text-blue-400 border border-blue-500/20">
+                            10 pc보다 가까운 별
+                        </span>
+                        <h3 id="star-detail-title" class="text-xl font-bold text-white mb-2">시리우스 (Sirius)</h3>
+                        <p id="star-detail-desc" class="text-xs text-slate-300 leading-relaxed">
+                            시리우스는 지구로부터 약 <strong>2.6 pc</strong> 떨어져 있어 10 pc보다 가깝습니다. 
+                            10 pc 위치로 강제로 밀어내면 별이 멀어지므로 <strong>더 어두워져서 등급 숫자가 커집니다</strong>!
+                        </p>
+                    </div>
+
+                    <!-- 등급 비교 박스 -->
+                    <div class="bg-slate-900/90 p-4 rounded-xl border border-slate-800 space-y-2 font-mono text-sm">
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-400 text-xs">겉보기 등급 (m):</span>
+                            <span id="display-app-mag" class="font-bold text-white">-1.5 등급</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-slate-400 text-xs">절대 등급 (M):</span>
+                            <span id="display-abs-mag" class="font-bold text-amber-400">+1.4 등급</span>
+                        </div>
+                        <div class="border-t border-slate-800 pt-2 flex justify-between items-center">
+                            <span class="text-xs text-cyan-400 font-bold">거리 지수 (m - M):</span>
+                            <span id="display-dist-mod" class="font-bold text-cyan-400">-2.9 (음수: 10pc 이내)</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-950 p-3 rounded-xl border border-slate-800/60 text-[11px] text-slate-400">
+                        💡 <strong>핵심 공식:</strong> $m - M < 0$ 이면 10 pc보다 가까움, $m - M > 0$ 이면 10 pc보다 먼 별!
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 섹션 3: 친구들과 돌아다니며 협의해서 푸는 랜덤 협동 퀴즈 (2문제 쏙쏙) -->
+        <section class="space-y-4 pt-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">🤝</span>
+                    <div>
+                        <h3 class="text-lg font-bold text-white">친구와 함께 해결하는 '별의 등급' 협동 퀴즈</h3>
+                        <p class="text-xs text-slate-400">옆 친구와 서로 의견을 나누며 정답을 선택해 보세요! (랜덤 2문항)</p>
+                    </div>
+                </div>
+                <button onclick="renderRandomQuizzes()" class="text-xs px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-cyan-300 rounded-xl border border-slate-700 flex items-center gap-1.5 transition">
+                    <i class="fas fa-dice text-[12px]"></i> 새로운 퀴즈 뽑기
+                </button>
+            </div>
+            
+            <!-- 퀴즈 2개가 삽입될 컨테이너 -->
+            <div id="quiz-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- JS로 무작위 2문항 생성 -->
+            </div>
+        </section>
+
+    </div>
+
+    <!-- 스크립트: 등급 전구 계산, 10pc 비교 인터랙션, 퀴즈 시스템 -->
+    <script>
+        /* ==========================================================
+           1. 등급과 밝기 시뮬레이션 (전구 표현)
+        ========================================================== */
+        const gradeSlider = document.getElementById('grade-slider');
+        const gradeBadge = document.getElementById('grade-badge');
+        const lightbulbGrid = document.getElementById('lightbulb-grid');
+        const lightbulbCountText = document.getElementById('lightbulb-count-text');
+        const brightnessRatio = document.getElementById('brightness-ratio');
+
+        // 등급별 상대 전구 개수 (6등급=1개, 1등급=100개)
+        const bulbCountMap = {
+            1: 100,
+            2: 40,
+            3: 16,
+            4: 6,
+            5: 3,
+            6: 1
+        };
+
+        function updateGradeLab(grade) {
+            gradeBadge.textContent = `${grade} 등급`;
+            const count = bulbCountMap[grade];
+            const ratio = Math.pow(2.512, 6 - grade);
+
+            brightnessRatio.textContent = `${ratio.toFixed(1)} 배`;
+            lightbulbCountText.textContent = `약 ${count}개 상당`;
+
+            // 전구 아이콘 동적 생성
+            lightbulbGrid.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const bulb = document.createElement('i');
+                bulb.className = 'fas fa-lightbulb text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.8)] text-base animate-pulse';
+                bulb.style.animationDuration = `${0.8 + Math.random() * 1.2}s`;
+                lightbulbGrid.appendChild(bulb);
+            }
+        }
+
+        gradeSlider.addEventListener('input', (e) => {
+            updateGradeLab(parseInt(e.target.value));
+        });
+
+        /* ==========================================================
+           2. 10pc 기준 겉보기 등급 vs 절대 등급 비교 다이어그램
+        ========================================================== */
+        let currentStar = 'sirius';
+        let currentPosition = 'real';
+
+        const groupSirius = document.getElementById('group-sirius');
+        const groupBetel = document.getElementById('group-betelgeuse');
+        const starObjSirius = document.getElementById('star-obj-sirius');
+        const starObjBetel = document.getElementById('star-obj-betel');
+
+        const siriusCore = document.getElementById('sirius-core');
+        const siriusTag = document.getElementById('sirius-tag');
+        const betelCore = document.getElementById('betel-core');
+        const betelTag = document.getElementById('betel-tag');
+        const betelGlowCircle = document.getElementById('betel-glow-circle');
+
+        const posBtnReal = document.getElementById('pos-btn-real');
+        const posBtn10pc = document.getElementById('pos-btn-10pc');
+
+        const starStatusPill = document.getElementById('star-status-pill');
+        const starDetailTitle = document.getElementById('star-detail-title');
+        const starDetailDesc = document.getElementById('star-detail-desc');
+        const displayAppMag = document.getElementById('display-app-mag');
+        const displayAbsMag = document.getElementById('display-abs-mag');
+        const displayDistMod = document.getElementById('display-dist-mod');
+
+        function selectStar(star) {
+            currentStar = star;
+            const btnSirius = document.getElementById('btn-sirius');
+            const btnBetel = document.getElementById('btn-betelgeuse');
+
+            if (star === 'sirius') {
+                btnSirius.className = 'px-4 py-2 rounded-xl text-xs font-bold transition bg-cyan-600 text-white shadow-lg';
+                btnBetel.className = 'px-4 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white';
+                groupSirius.classList.remove('hidden');
+                groupBetel.classList.add('hidden');
+
+                starStatusPill.className = 'inline-block px-2.5 py-1 rounded-lg text-xs font-bold mb-2 bg-blue-500/10 text-blue-400 border border-blue-500/20';
+                starStatusPill.textContent = '10 pc보다 가까운 별 (거리 약 2.6 pc)';
+                starDetailTitle.textContent = '시리우스 (밤하늘에서 가장 밝은 별)';
+                starDetailDesc.innerHTML = '시리우스는 실제 지구와 매우 가까워 눈에는 엄청 밝게(-1.5등급) 보입니다. 하지만 기준 거리인 <strong>10 pc로 멀리 보내면 어두워져서 절대 등급이 +1.4등급</strong>으로 커집니다.';
+                displayAppMag.textContent = '-1.5 등급';
+                displayAbsMag.textContent = '+1.4 등급';
+                displayDistMod.textContent = '-2.9 (음수: 10 pc보다 가까움)';
+            } else {
+                btnBetel.className = 'px-4 py-2 rounded-xl text-xs font-bold transition bg-red-600 text-white shadow-lg';
+                btnSirius.className = 'px-4 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white';
+                groupBetel.classList.remove('hidden');
+                groupSirius.classList.add('hidden');
+
+                starStatusPill.className = 'inline-block px-2.5 py-1 rounded-lg text-xs font-bold mb-2 bg-red-500/10 text-red-400 border border-red-500/20';
+                starStatusPill.textContent = '10 pc보다 훨씬 먼 별 (거리 약 168 pc)';
+                starDetailTitle.textContent = '베텔게우스 (오리온자리의 붉은 초거성)';
+                starDetailDesc.innerHTML = '베텔게우스는 실제 엄청 멀리 있어서 눈에는 0.6등급으로 보이지만, 만약 <strong>10 pc 거리로 앞으로 당겨오면 무려 -5.9등급</strong>으로 금성보다 수십 배나 밝게 빛나는 괴물별입니다!';
+                displayAppMag.textContent = '+0.6 등급';
+                displayAbsMag.textContent = '-5.9 등급';
+                displayDistMod.textContent = '+6.5 (양수: 10 pc보다 훨씬 멂)';
+            }
+            toggleStarDistance('real');
+        }
+
+        function toggleStarDistance(pos) {
+            currentPosition = pos;
+            if (pos === 'real') {
+                posBtnReal.className = 'px-3.5 py-1.5 bg-slate-800 text-cyan-300 border border-cyan-500 rounded-xl text-xs font-bold transition';
+                posBtn10pc.className = 'px-3.5 py-1.5 bg-slate-900 text-slate-400 border border-slate-700 rounded-xl text-xs font-bold transition hover:text-white';
+
+                // 시리우스 실제 위치 복귀 (2.6pc: x=220, y=220)
+                starObjSirius.setAttribute('transform', 'translate(220, 220)');
+                siriusCore.setAttribute('r', '14');
+                siriusTag.textContent = '겉보기: -1.5 등급 (크고 밝음)';
+
+                // 베텔게우스 실제 위치 복귀 (먼 곳: x=560, y=90)
+                starObjBetel.setAttribute('transform', 'translate(560, 90)');
+                betelCore.setAttribute('r', '10');
+                betelGlowCircle.setAttribute('r', '22');
+                betelTag.textContent = '겉보기: 0.6 등급';
+            } else {
+                posBtn10pc.className = 'px-3.5 py-1.5 bg-slate-800 text-amber-300 border border-amber-500 rounded-xl text-xs font-bold transition';
+                posBtnReal.className = 'px-3.5 py-1.5 bg-slate-900 text-slate-400 border border-slate-700 rounded-xl text-xs font-bold transition hover:text-white';
+
+                // 시리우스 10pc 가상 위치로 이동 (x=220, y=80) -> 멀어져서 작아지고 어두워짐
+                starObjSirius.setAttribute('transform', 'translate(220, 80)');
+                siriusCore.setAttribute('r', '7');
+                siriusTag.textContent = '절대 등급: +1.4 등급 (어두워짐!)';
+
+                // 베텔게우스 10pc 가상 위치로 당겨옴 (x=370, y=210) -> 가까워져서 거대하고 눈부셔짐
+                starObjBetel.setAttribute('transform', 'translate(370, 210)');
+                betelCore.setAttribute('r', '22');
+                betelGlowCircle.setAttribute('r', '45');
+                betelTag.textContent = '절대 등급: -5.9 등급 (압도적으로 밝아짐!)';
+            }
+        }
+
+        /* ==========================================================
+           3. 친구와 함께 푸는 랜덤 협동 퀴즈 시스템 (6문항 중 2개 랜덤 노출)
+        ========================================================== */
+        const quizBank = [
+            {
+                q: "1등급 별은 6등급 별보다 약 몇 배 더 밝을까요?",
+                options: ["약 5배", "약 25배", "약 100배", "약 1000배"],
+                answer: 2,
+                explain: "1등급 차이마다 약 2.512배 밝기 차이가 나므로, 5등급 차이는 2.5^5 ≈ 100배 밝기 차이가 납니다!"
+            },
+            {
+                q: "어떤 별의 겉보기 등급(m)이 3등급이고, 절대 등급(M)이 -2등급입니다. 이 별은 지구에서 얼마나 떨어져 있을까요?",
+                options: ["10 pc보다 가까이에 있다", "정확히 10 pc 거리에 있다", "10 pc보다 더 먼 거리에 있다", "알 수 없다"],
+                answer: 2,
+                explain: "겉보기 등급(3)이 절대 등급(-2)보다 숫자가 크다는 것은, 10pc에 가져다 놓았을 때 더 밝아진다는 뜻이므로 실제 10pc보다 먼 곳에 있는 별입니다. (m - M = 5 > 0)"
+            },
+            {
+                q: "다음 중 밤하늘에서 우리 눈으로 보았을 때 '가장 밝게 보이는' 별의 등급은?",
+                options: ["-1.5 등급", "0.0 등급", "+2.5 등급", "+6.0 등급"],
+                answer: 0,
+                explain: "별의 등급은 숫자가 작을수록, 마이너스(-) 부호가 붙을수록 더 밝은 별입니다!"
+            },
+            {
+                q: "절대 등급(Absolute Magnitude)을 정할 때 모든 별을 가져다 놓았다고 가정하는 기준 거리는?",
+                options: ["1 AU (태양-지구 거리)", "1 광년 (ly)", "10 pc (파섹)", "100 pc (파섹)"],
+                answer: 2,
+                explain: "별의 고유한 실제 밝기를 비교하기 위해 모든 별을 '10 pc(약 32.6광년)' 거리에 나란히 두었다고 가정한 밝기가 절대 등급입니다."
+            },
+            {
+                q: "어떤 별이 정확히 10 pc 거리에 위치해 있다면, 이 별의 겉보기 등급(m)과 절대 등급(M)의 관계는?",
+                options: ["m > M", "m = M", "m < M", "m - M = 10"],
+                answer: 1,
+                explain: "절대 등급의 기준 거리 자체가 10 pc이므로, 10 pc에 있는 별은 겉보기 등급과 절대 등급이 완전히 같습니다 (m - M = 0)."
+            },
+            {
+                q: "시리우스는 겉보기 등급이 -1.5이고 절대 등급이 +1.4입니다. 만약 시리우스가 지금보다 지구에서 2배 더 멀어진다면 겉보기 등급 숫자는?",
+                options: ["숫자가 작아진다 (예: -3.0)", "숫자가 커진다 (예: +0.5)", "등급 숫자는 변하지 않는다", "0이 된다"],
+                answer: 1,
+                explain: "별이 지구에서 멀어지면 더 어두워지므로, 어두워질수록 등급 숫자는 '더 커집니다'!"
+            }
+        ];
+
+        function renderRandomQuizzes() {
+            const container = document.getElementById('quiz-container');
+            const shuffled = [...quizBank].sort(() => 0.5 - Math.random());
+            const selected = shuffled.slice(0, 2);
+
+            container.innerHTML = selected.map((item, qIdx) => `
+                <div class="glass-panel p-6 rounded-2xl flex flex-col justify-between border border-slate-800 space-y-4">
+                    <div>
+                        <div class="flex items-center gap-2 mb-2">
+                            <span class="px-2.5 py-0.5 bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-xs font-bold rounded-md">문제 0${qIdx + 1}</span>
+                            <span class="text-xs text-slate-400">협동 토론 과제</span>
+                        </div>
+                        <h4 class="font-bold text-white text-sm md:text-base leading-snug">${item.q}</h4>
+                    </div>
+
+                    <!-- 보기 목록 -->
+                    <div class="space-y-2">
+                        ${item.options.map((opt, optIdx) => `
+                            <button onclick="checkAnswer(${qIdx}, ${optIdx},${item.answer}, this)" 
+                                    class="quiz-opt-btn-${qIdx} w-full text-left px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-xs text-slate-300 rounded-xl border border-slate-800 transition flex items-center justify-between">
+                                <span>${optIdx + 1}.${opt}</span>
+                                <i class="fas fa-check-circle opacity-0"></i>
+                            </button>
+                        `).join('')}
+                    </div>
+
+                    <!-- 해설 피드백 박스 -->
+                    <div id="quiz-feedback-${qIdx}" class="hidden p-3.5 rounded-xl text-xs leading-relaxed"></div>
+                </div>
+            `).join('');
+        }
+
+        window.checkAnswer = function(qIdx, selectedOpt, correctOpt, btn) {
+            const allBtns = document.querySelectorAll(`.quiz-opt-btn-${qIdx}`);
+            const feedback = document.getElementById(`quiz-feedback-${qIdx}`);
+            allBtns.forEach(b => b.classList.add('pointer-events-none')); // 다중 클릭 방지
+
+            if (selectedOpt === correctOpt) {
+                btn.classList.add('bg-emerald-950', 'border-emerald-500', 'text-emerald-300');
+                feedback.className = 'p-3.5 rounded-xl text-xs leading-relaxed bg-emerald-950/60 border border-emerald-800 text-emerald-300 block';
+                feedback.innerHTML = `<strong>🎉 정답입니다!</strong> 친구와 정확히 협의했네요. <br>${quizBank.find(item => item.options[correctOpt] === btn.innerText.split('. ')[1]).explain}`;
+            } else {
+                btn.classList.add('bg-rose-950', 'border-rose-500', 'text-rose-300');
+                allBtns[correctOpt].classList.add('bg-emerald-950/50', 'border-emerald-500/50', 'text-emerald-300');
+                feedback.className = 'p-3.5 rounded-xl text-xs leading-relaxed bg-rose-950/60 border border-rose-800 text-rose-300 block';
+                feedback.innerHTML = `<strong>아쉽네요! 다시 생각해 보세요.</strong> <br>정답은 <strong>${correctOpt + 1}번</strong>입니다. <br>${quizBank.find(item => item.options[correctOpt] === allBtns[correctOpt].innerText.split('. ')[1]).explain}`;
+            }
+        };
+
+        // 초기화 로드
+        updateGradeLab(1);
+        renderRandomQuizzes();
+    </script>
+</body>
+</html>
