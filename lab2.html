@@ -19,9 +19,12 @@
             backdrop-filter: blur(12px);
             border: 1px solid rgba(51, 65, 85, 0.4);
         }
-        /* 별의 부드러운 위치 이동 애니메이션 */
-        .star-transition {
-            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        #draggable-star {
+            cursor: grab;
+            touch-action: none;
+        }
+        #draggable-star:active {
+            cursor: grabbing;
         }
     </style>
 </head>
@@ -39,7 +42,7 @@
             <span class="px-3 py-1 bg-amber-950/60 border border-amber-800/60 text-amber-400 text-xs font-bold rounded-full">중3 과학 천체</span>
         </header>
 
-        <!-- 섹션 1: 등급과 밝기 관계 (전구 시뮬레이션) -->
+        <!-- 섹션 1: 등급과 밝기 관계 (전구 시뮬레이션 및 1:1 정렬 슬라이더) -->
         <section class="glass-panel p-6 md:p-8 rounded-3xl space-y-6">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
@@ -56,61 +59,45 @@
                 </div>
             </div>
 
- <!-- 등급 조절 슬라이더 (수학적 절대 좌표로 1:1 칼정렬) -->
+            <!-- 등급 조절 슬라이더 (수학적 1:1 칼정렬) -->
             <div class="space-y-4 bg-slate-900/60 p-6 rounded-2xl border border-slate-800">
-                <!-- 슬라이더 Thumb 중심점(8px)에 맞춘 라벨 컨테이너 -->
                 <div class="relative w-full h-10 select-none">
-                    <!-- 1등급 (0%) -->
-                    <div onclick="setGrade(1)" class="absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 0);">
+                    <div onclick="setGrade(1)" class="grade-label absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 0);">
                         <span class="text-xs font-mono font-bold text-slate-400 group-hover:text-amber-300 block">1 등급</span>
                         <span class="text-[10px] text-slate-500 block -mt-1">(가장 밝음)</span>
                     </div>
-
-                    <!-- 2등급 (20%) -->
-                    <div onclick="setGrade(2)" class="absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 0.2);">
+                    <div onclick="setGrade(2)" class="grade-label absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 0.2);">
                         <span class="text-xs font-mono font-bold text-slate-400 group-hover:text-amber-300 block">2 등급</span>
                     </div>
-
-                    <!-- 3등급 (40%) -->
-                    <div onclick="setGrade(3)" class="absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 0.4);">
+                    <div onclick="setGrade(3)" class="grade-label absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 0.4);">
                         <span class="text-xs font-mono font-bold text-slate-400 group-hover:text-amber-300 block">3 등급</span>
                     </div>
-
-                    <!-- 4등급 (60%) -->
-                    <div onclick="setGrade(4)" class="absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 0.6);">
+                    <div onclick="setGrade(4)" class="grade-label absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 0.6);">
                         <span class="text-xs font-mono font-bold text-slate-400 group-hover:text-amber-300 block">4 등급</span>
                     </div>
-
-                    <!-- 5등급 (80%) -->
-                    <div onclick="setGrade(5)" class="absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 0.8);">
+                    <div onclick="setGrade(5)" class="grade-label absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 0.8);">
                         <span class="text-xs font-mono font-bold text-slate-400 group-hover:text-amber-300 block">5 등급</span>
                     </div>
-
-                    <!-- 6등급 (100%) -->
-                    <div onclick="setGrade(6)" class="absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 1.0);">
+                    <div onclick="setGrade(6)" class="grade-label absolute -translate-x-1/2 text-center cursor-pointer group" style="left: calc(8px + (100% - 16px) * 1.0);">
                         <span class="text-xs font-mono font-bold text-slate-400 group-hover:text-amber-300 block">6 등급</span>
                         <span class="text-[10px] text-slate-500 block -mt-1">(가장 어두움)</span>
                     </div>
                 </div>
 
-                <!-- 슬라이더 본체 -->
                 <div class="relative w-full">
-                    <input type="range" id="grade-slider" min="1" max="6" step="1" value="4" 
+                    <input type="range" id="grade-slider" min="1" max="6" step="1" value="1" 
                            class="w-full h-2.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-400 block m-0">
                 </div>
             </div>
 
-            <!-- 전구 시각화 & 상대적 밝기 디스플레이 -->
+            <!-- 전구 디스플레이 -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center bg-slate-950/80 p-6 rounded-2xl border border-slate-800">
                 <div class="md:col-span-2 space-y-3">
                     <div class="flex items-center justify-between">
-                        <span class="text-xs text-slate-400 font-bold">상대적 밝기 전구 개수 (6등급 = 전구 1개 기준)</span>
+                        <span class="text-xs text-slate-400 font-bold">상대적 밝기 전구 개수 (6등급 = 1개 기준)</span>
                         <span id="lightbulb-count-text" class="text-sm font-bold text-amber-400 font-mono">약 100개 상당</span>
                     </div>
-                    <!-- 전구들이 렌더링되는 영역 -->
-                    <div id="lightbulb-grid" class="flex flex-wrap gap-1.5 p-4 bg-slate-900/70 rounded-xl min-h-[90px] max-h-[140px] overflow-y-auto border border-slate-800/80">
-                        <!-- JS로 동적 생성 -->
-                    </div>
+                    <div id="lightbulb-grid" class="flex flex-wrap gap-1.5 p-4 bg-slate-900/70 rounded-xl min-h-[90px] max-h-[140px] overflow-y-auto border border-slate-800/80"></div>
                 </div>
                 <div class="bg-slate-900/90 p-5 rounded-xl border border-amber-500/20 text-center space-y-1">
                     <span class="text-xs text-slate-400 font-bold">6등급 별 대비 밝기 배율</span>
@@ -120,18 +107,17 @@
             </div>
         </section>
 
-      <!-- 섹션 2: 겉보기 등급 vs 절대 등급 (직접 드래그 인터랙션) -->
+        <!-- 섹션 2: 겉보기 등급 vs 절대 등급 (드래그 & 미세 조절 바 탑재) -->
         <section class="glass-panel p-6 md:p-8 rounded-3xl space-y-6">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <h2 class="text-xl font-bold text-cyan-400 flex items-center">
-                        <i class="fas fa-hand-pointer mr-2 animate-bounce"></i> 2. 겉보기 등급 vs 절대 등급 (별을 직접 드래그해 보세요!)
+                        <i class="fas fa-arrows-alt-v mr-2 text-amber-400"></i> 2. 겉보기 등급 vs 절대 등급 (10 pc 기준 비교)
                     </h2>
                     <p class="text-sm text-slate-400 mt-1">
-                        별을 직접 <strong>클릭 & 드래그</strong>해서 10 pc 노란 점선 위치로 이동시켜 보세요. 10 pc에 가까워지면 자석처럼 달라붙습니다.
+                        별을 <strong>직접 마우스로 잡고 드래그</strong>하거나 아래 <strong>위치 조절 바</strong>를 움직여 10 pc 노란 점선 위치로 이동시켜 보세요!
                     </p>
                 </div>
-                <!-- 별 선택 토글 탭 -->
                 <div class="flex bg-slate-900 p-1.5 rounded-2xl border border-slate-800 shrink-0">
                     <button onclick="selectStar('sirius')" id="btn-sirius" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-cyan-600 text-white shadow-lg">
                         시리우스 (가까운 별)
@@ -142,11 +128,11 @@
                 </div>
             </div>
 
-            <!-- 시각화 영역: 다이어그램과 상태 설명 패널 -->
+            <!-- 시각화 영역: SVG 다이어그램 & 설명 패널 -->
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                 <!-- SVG 우주 다이어그램 -->
-                <div class="lg:col-span-2 bg-slate-950 rounded-2xl border border-slate-800 p-4 relative min-h-[440px] flex items-center justify-center overflow-hidden select-none">
-                    <svg id="universe-svg" class="w-full h-[400px] cursor-default" viewBox="0 0 650 400">
+                <div class="lg:col-span-2 bg-slate-950 rounded-2xl border border-slate-800 p-4 relative min-h-[440px] flex flex-col justify-between select-none">
+                    <svg id="universe-svg" class="w-full h-[360px]" viewBox="0 0 650 380">
                         <defs>
                             <radialGradient id="earth-glow" cx="50%" cy="50%" r="50%">
                                 <stop offset="0%" stop-color="#38bdf8" />
@@ -164,7 +150,7 @@
                             </radialGradient>
                         </defs>
 
-                        <!-- 배경 은하수 별가루 -->
+                        <!-- 배경 별가루 -->
                         <g opacity="0.25">
                             <circle cx="50" cy="80" r="1" fill="#fff" />
                             <circle cx="150" cy="40" r="1.5" fill="#fff" />
@@ -175,56 +161,60 @@
                             <circle cx="520" cy="320" r="1.5" fill="#fff" />
                         </g>
 
-                        <!-- 10 pc 기준 원호 (지구 240, 320 기준 반경 R = 230) -->
-                        <path d="M 70 180 A 230 230 0 0 1 470 320" fill="none" stroke="#facc15" stroke-width="2.5" stroke-dasharray="6 6" />
-                        <text x="390" y="275" fill="#facc15" font-size="13" font-weight="extrabold">10 pc 기준선</text>
+                        <!-- 10 pc 기준 원호 (지구 240, 310 기준 반경 R = 230) -->
+                        <path d="M 60 160 A 230 230 0 0 1 470 310" fill="none" stroke="#facc15" stroke-width="2.5" stroke-dasharray="6 6" />
+                        <text x="390" y="270" fill="#facc15" font-size="13" font-weight="extrabold">10 pc 기준선</text>
 
                         <!-- 관측 경로 보조 점선 -->
-                        <line id="guide-line" x1="240" y1="320" x2="240" y2="60" stroke="rgba(148, 163, 184, 0.3)" stroke-width="2" stroke-dasharray="4 4" />
+                        <line id="guide-line" x1="240" y1="310" x2="240" y2="50" stroke="rgba(148, 163, 184, 0.3)" stroke-width="2" stroke-dasharray="4 4" />
 
-                        <!-- 지구 (원점: 240, 320) -->
-                        <g transform="translate(240, 320)">
-                            <circle cx="0" cy="0" r="28" fill="url(#earth-glow)" opacity="0.4" />
+                        <!-- 지구 (관측자) -->
+                        <g transform="translate(240, 310)">
+                            <circle cx="0" cy="0" r="26" fill="url(#earth-glow)" opacity="0.4" />
                             <circle cx="0" cy="0" r="16" fill="#1d4ed8" stroke="#38bdf8" stroke-width="2" />
                             <text x="0" y="4" font-size="10" fill="#ffffff" font-weight="bold" text-anchor="middle">지구</text>
-                            <text x="0" y="30" font-size="11" fill="#94a3b8" text-anchor="middle">관측자</text>
+                            <text x="0" y="28" font-size="11" fill="#94a3b8" text-anchor="middle">관측자</text>
                         </g>
 
-                        <!-- 지구에서 10pc까지의 노란 거리선 -->
-                        <line x1="260" y1="320" x2="465" y2="320" stroke="#facc15" stroke-width="2" />
-                        <text x="365" y="340" fill="#facc15" font-size="12" font-weight="bold" text-anchor="middle">10 pc</text>
+                        <!-- 10 pc 거리 안내선 -->
+                        <line x1="260" y1="310" x2="465" y2="310" stroke="#facc15" stroke-width="2" />
+                        <text x="365" y="330" fill="#facc15" font-size="12" font-weight="bold" text-anchor="middle">10 pc</text>
 
-                        <!-- 고정 위치 가이드 마커 -->
+                        <!-- 고정 마커들 -->
                         <g id="fixed-markers">
-                            <!-- 10 pc 정점 타겟 -->
-                            <circle id="target-10pc-marker" cx="240" cy="90" r="18" fill="none" stroke="#facc15" stroke-width="2" stroke-dasharray="3 3" opacity="0.6" />
-                            <text id="target-10pc-text" x="240" y="65" font-size="11" fill="#facc15" font-weight="bold" text-anchor="middle">10 pc 위치 (절대 등급)</text>
+                            <circle id="target-10pc-marker" cx="240" cy="80" r="18" fill="none" stroke="#facc15" stroke-width="2" stroke-dasharray="3 3" />
+                            <text id="target-10pc-text" x="240" y="55" font-size="11" fill="#facc15" font-weight="bold" text-anchor="middle">10 pc (절대 등급 위치)</text>
 
-                            <!-- 원래 실제 위치 마커 -->
-                            <circle id="real-pos-marker" cx="240" cy="240" r="12" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="2 2" opacity="0.5" />
-                            <text id="real-pos-text" x="180" y="245" font-size="11" fill="#38bdf8" font-weight="bold" text-anchor="end">실제 위치 (2.6 pc)</text>
+                            <circle id="real-pos-marker" cx="240" cy="230" r="12" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-dasharray="2 2" />
+                            <text id="real-pos-text" x="180" y="235" font-size="11" fill="#38bdf8" font-weight="bold" text-anchor="end">실제 위치 (2.6 pc)</text>
                         </g>
 
-                       <!-- 드래그 가능한 별 오브젝트 (터치 영역 대폭 확대 및 이벤트 활성화) -->
-                        <g id="draggable-star" transform="translate(240, 240)" style="cursor: grab; touch-action: none;">
-                            <!-- 손가락/마우스로 쉽게 잡을 수 있는 투명 터치 패드 (반지름 40px) -->
-                            <circle cx="0" cy="0" r="40" fill="transparent" style="cursor: grab;" />
-                            
-                            <circle id="drag-glow" cx="0" cy="0" r="30" fill="url(#sirius-glow)" opacity="0.8" style="pointer-events: none;" />
-                            <circle id="drag-core" cx="0" cy="0" r="14" fill="#ffffff" stroke="rgba(255,255,255,0.8)" stroke-width="2" style="pointer-events: none;" />
-                            <text id="drag-tag" x="0" y="-36" font-size="12" fill="#ffffff" font-weight="extrabold" text-anchor="middle" style="pointer-events: none; user-select: none;">시리우스 (드래그 가능)</text>
-                            <text id="drag-subtag" x="0" y="-20" font-size="11" fill="#38bdf8" font-weight="bold" text-anchor="middle" style="pointer-events: none; user-select: none;">현재 겉보기: -1.5 등급</text>
+                        <!-- 드래그 가능한 별 오브젝트 -->
+                        <g id="draggable-star" transform="translate(240, 230)">
+                            <!-- 터치 판정용 투명 원 -->
+                            <circle cx="0" cy="0" r="45" fill="transparent" />
+                            <circle id="drag-glow" cx="0" cy="0" r="30" fill="url(#sirius-glow)" opacity="0.8" pointer-events="none" />
+                            <circle id="drag-core" cx="0" cy="0" r="14" fill="#ffffff" stroke="rgba(255,255,255,0.8)" stroke-width="2" pointer-events="none" />
+                            <text id="drag-tag" x="0" y="-36" font-size="12" fill="#ffffff" font-weight="extrabold" text-anchor="middle" pointer-events="none">시리우스</text>
+                            <text id="drag-subtag" x="0" y="-20" font-size="11" fill="#38bdf8" font-weight="bold" text-anchor="middle" pointer-events="none">겉보기: -1.5 등급</text>
                         </g>
                     </svg>
 
-                    <!-- 빠른 프리셋 버튼 (다이어그램 우측 하단) -->
-                    <div class="absolute bottom-4 right-4 flex gap-2">
-                        <button onclick="snapToPosition('real')" class="px-3 py-1.5 bg-slate-900/90 text-slate-300 border border-slate-700 hover:border-cyan-400 rounded-xl text-xs font-bold transition">
-                            실제 위치로 복귀
-                        </button>
-                        <button onclick="snapToPosition('10pc')" class="px-3 py-1.5 bg-amber-950/80 text-amber-300 border border-amber-500/60 hover:bg-amber-900/80 rounded-xl text-xs font-bold transition">
-                            10 pc 선으로 즉시 이동
-                        </button>
+                    <!-- 하단 조작 바 (슬라이더 조작 + 원터치 스냅 버튼) -->
+                    <div class="bg-slate-900/90 p-3 rounded-xl border border-slate-800 flex flex-col md:flex-row items-center gap-3 mt-2">
+                        <div class="flex-1 w-full flex items-center gap-3 px-2">
+                            <span class="text-xs text-slate-400 font-bold whitespace-nowrap"><i class="fas fa-arrows-alt-v mr-1"></i> 별 위치:</span>
+                            <input type="range" id="star-dist-slider" min="60" max="350" value="80" 
+                                   class="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-400">
+                        </div>
+                        <div class="flex gap-2 shrink-0">
+                            <button onclick="snapToPosition('real')" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 rounded-lg text-xs font-bold transition">
+                                실제 위치
+                            </button>
+                            <button onclick="snapToPosition('10pc')" class="px-3 py-1.5 bg-amber-950/80 hover:bg-amber-900 text-amber-300 border border-amber-500/60 rounded-lg text-xs font-bold transition">
+                                10 pc 점선에 맞추기
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -236,7 +226,7 @@
                         </span>
                         <h3 id="star-detail-title" class="text-xl font-bold text-white mb-2">시리우스 (Sirius)</h3>
                         <p id="star-detail-desc" class="text-xs text-slate-300 leading-relaxed">
-                            별을 <strong>위로 드래그하여 10 pc 점선</strong>에 놓아보세요. 지구에서 멀어지면서 점점 어두워지고 등급 숫자가 커지는 것을 확인할 수 있습니다.
+                            별을 <strong>위로 밀어 10 pc 점선</strong>에 놓아보세요. 지구에서 멀어지므로 <strong>더 어두워져서 등급 숫자가 커집니다</strong>!
                         </p>
                     </div>
 
@@ -256,14 +246,14 @@
                         </div>
                     </div>
 
-                    <div id="distance-indicator-box" class="bg-slate-950 p-3 rounded-xl border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
-                        📍 <strong>10 pc 스냅 안내:</strong> 별을 드래그해서 노란 점선 근처에 놓으면 자동으로 '10 pc 절대 등급' 위치에 자석처럼 맞춰집니다.
+                    <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 text-[11px] text-slate-400 leading-relaxed">
+                        📍 <strong>자석 스냅 안내:</strong> 별을 드래그해서 노란 점선(10 pc) 근처로 가져가면 자석처럼 '찰칵' 달라붙으며 절대 등급 상태가 됩니다.
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 섹션 3: 친구들과 돌아다니며 협의해서 푸는 랜덤 협동 퀴즈 (2문제 쏙쏙) -->
+        <!-- 섹션 3: 친구와 함께 푸는 랜덤 협동 퀴즈 (2문제 쏙쏙) -->
         <section class="space-y-4 pt-4">
             <div class="flex items-center justify-between">
                 <div class="flex items-center gap-2">
@@ -278,18 +268,15 @@
                 </button>
             </div>
             
-            <!-- 퀴즈 2개가 삽입될 컨테이너 -->
-            <div id="quiz-container" class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                <!-- JS로 무작위 2문항 생성 -->
-            </div>
+            <div id="quiz-container" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div>
         </section>
 
     </div>
 
-    <!-- 스크립트: 등급 전구 계산, 10pc 비교 인터랙션, 퀴즈 시스템 -->
+    <!-- 스크립트: 등급 전구, 10pc 드래그/슬라이더 엔진, 퀴즈 -->
     <script>
         /* ==========================================================
-           1. 등급과 밝기 시뮬레이션 (전구 표현)
+           1. 전구 및 슬라이더 시뮬레이션
         ========================================================== */
         const gradeSlider = document.getElementById('grade-slider');
         const gradeBadge = document.getElementById('grade-badge');
@@ -297,15 +284,7 @@
         const lightbulbCountText = document.getElementById('lightbulb-count-text');
         const brightnessRatio = document.getElementById('brightness-ratio');
 
-        // 등급별 상대 전구 개수 (6등급=1개, 1등급=100개)
-        const bulbCountMap = {
-            1: 100,
-            2: 40,
-            3: 16,
-            4: 6,
-            5: 3,
-            6: 1
-        };
+        const bulbCountMap = { 1: 100, 2: 40, 3: 16, 4: 6, 5: 3, 6: 1 };
 
         function updateGradeLab(grade) {
             gradeBadge.textContent = `${grade} 등급`;
@@ -315,7 +294,6 @@
             brightnessRatio.textContent = `${ratio.toFixed(1)} 배`;
             lightbulbCountText.textContent = `약 ${count}개 상당`;
 
-            // 전구 아이콘 동적 생성
             lightbulbGrid.innerHTML = '';
             for (let i = 0; i < count; i++) {
                 const bulb = document.createElement('i');
@@ -323,109 +301,237 @@
                 bulb.style.animationDuration = `${0.8 + Math.random() * 1.2}s`;
                 lightbulbGrid.appendChild(bulb);
             }
+
+            document.querySelectorAll('.grade-label').forEach((el, idx) => {
+                const span = el.querySelector('span');
+                if (idx + 1 === grade) {
+                    span.className = 'text-xs font-mono font-extrabold text-amber-400 scale-110 block';
+                } else {
+                    span.className = 'text-xs font-mono font-bold text-slate-400 block';
+                }
+            });
         }
 
-        gradeSlider.addEventListener('input', (e) => {
-            updateGradeLab(parseInt(e.target.value));
-        });
+        function setGrade(grade) {
+            gradeSlider.value = grade;
+            updateGradeLab(grade);
+        }
+
+        gradeSlider.addEventListener('input', (e) => updateGradeLab(parseInt(e.target.value)));
 
         /* ==========================================================
-           2. 10pc 기준 겉보기 등급 vs 절대 등급 비교 다이어그램
+           2. 10pc 인터랙티브 엔진 (드래그 + 슬라이더 + 스냅 통합)
         ========================================================== */
         let currentStar = 'sirius';
-        let currentPosition = 'real';
+        const earthX = 240;
+        const earthY = 310;
+        const R_10PC = 230; // 10pc 반지름
 
-        const groupSirius = document.getElementById('group-sirius');
-        const groupBetel = document.getElementById('group-betelgeuse');
-        const starObjSirius = document.getElementById('star-obj-sirius');
-        const starObjBetel = document.getElementById('star-obj-betel');
+        const starConfig = {
+            sirius: {
+                name: '시리우스',
+                glow: 'url(#sirius-glow)',
+                coreColor: '#ffffff',
+                angle: -Math.PI / 2, // 수직 위
+                realDistPc: 2.6,
+                realR: 80,
+                realMag: -1.5,
+                absMag: +1.4,
+                desc: '시리우스는 10 pc보다 가깝습니다. <strong>위쪽 10 pc 점선으로 밀어내면</strong> 별이 멀어져 어두워지므로 등급 숫자가 커집니다(+1.4등급)!'
+            },
+            betelgeuse: {
+                name: '베텔게우스',
+                glow: 'url(#betel-glow)',
+                coreColor: '#ef4444',
+                angle: -Math.PI / 4, // 대각선 약 45도
+                realDistPc: 168,
+                realR: 340,
+                realMag: +0.6,
+                absMag: -5.9,
+                desc: '베텔게우스는 실제 10 pc보다 훨씬 멂(168pc). <strong>지구 쪽(10 pc 점선)으로 끌어당기면</strong> 엄청나게 밝아져 절대 등급이 무려 -5.9등급이 됩니다!'
+            }
+        };
 
-        const siriusCore = document.getElementById('sirius-core');
-        const siriusTag = document.getElementById('sirius-tag');
-        const betelCore = document.getElementById('betel-core');
-        const betelTag = document.getElementById('betel-tag');
-        const betelGlowCircle = document.getElementById('betel-glow-circle');
-
-        const posBtnReal = document.getElementById('pos-btn-real');
-        const posBtn10pc = document.getElementById('pos-btn-10pc');
-
+        const universeSvg = document.getElementById('universe-svg');
+        const draggableStar = document.getElementById('draggable-star');
+        const dragGlow = document.getElementById('drag-glow');
+        const dragCore = document.getElementById('drag-core');
+        const dragTag = document.getElementById('drag-tag');
+        const dragSubtag = document.getElementById('drag-subtag');
+        const guideLine = document.getElementById('guide-line');
+        const target10pcMarker = document.getElementById('target-10pc-marker');
+        const target10pcText = document.getElementById('target-10pc-text');
+        const realPosMarker = document.getElementById('real-pos-marker');
+        const realPosText = document.getElementById('real-pos-text');
+        const currentPosStatus = document.getElementById('current-pos-status');
+        const currentMagStatus = document.getElementById('current-mag-status');
+        const displayAbsMag = document.getElementById('display-abs-mag');
         const starStatusPill = document.getElementById('star-status-pill');
         const starDetailTitle = document.getElementById('star-detail-title');
         const starDetailDesc = document.getElementById('star-detail-desc');
-        const displayAppMag = document.getElementById('display-app-mag');
-        const displayAbsMag = document.getElementById('display-abs-mag');
-        const displayDistMod = document.getElementById('display-dist-mod');
+        const starDistSlider = document.getElementById('star-dist-slider');
+
+        let isDragging = false;
+        let currentR = starConfig.sirius.realR;
+
+        function updateStarPosition(r, forceSnap = false) {
+            const conf = starConfig[currentStar];
+            currentR = r;
+
+            // 10 pc 노란 점선 근처(오차 20px) 접근 시 자석 스냅
+            const isNear10pc = Math.abs(currentR - R_10PC) < 20;
+            if (forceSnap || isNear10pc) {
+                currentR = R_10PC;
+            }
+
+            // 슬라이더 바 값도 일치시킴
+            starDistSlider.value = currentR;
+
+            const starX = earthX + currentR * Math.cos(conf.angle);
+            const starY = earthY + currentR * Math.sin(conf.angle);
+
+            draggableStar.setAttribute('transform', `translate(${starX}, ${starY})`);
+
+            // 크기 및 광량 시각화
+            const scaleRatio = R_10PC / currentR;
+            const baseSize = currentStar === 'betelgeuse' ? 14 : 12;
+            const coreRadius = Math.max(6, Math.min(26, baseSize * Math.sqrt(scaleRatio)));
+            const glowRadius = Math.max(14, Math.min(50, coreRadius * 2.2));
+
+            dragCore.setAttribute('r', coreRadius);
+            dragGlow.setAttribute('r', glowRadius);
+
+            // 상태 텍스트
+            if (currentR === R_10PC) {
+                dragTag.textContent = `${conf.name} (10 pc 도달!)`;
+                dragSubtag.textContent = `절대 등급: ${conf.absMag > 0 ? '+' : ''}${conf.absMag} 등급`;
+                currentPosStatus.textContent = '10 pc 기준선 위 (절대 등급)';
+                currentPosStatus.className = 'font-bold text-amber-300 animate-pulse';
+                currentMagStatus.textContent = `${conf.absMag > 0 ? '+' : ''}${conf.absMag} 등급 (고유 밝기)`;
+                target10pcMarker.setAttribute('stroke', '#ffffff');
+                target10pcMarker.setAttribute('stroke-width', '3');
+            } else {
+                dragTag.textContent = conf.name;
+                const isReal = Math.abs(currentR - conf.realR) < 15;
+                if (isReal) {
+                    currentPosStatus.textContent = `실제 위치 (${conf.realDistPc} pc)`;
+                    currentPosStatus.className = 'font-bold text-cyan-300';
+                    currentMagStatus.textContent = `${conf.realMag > 0 ? '+' : ''}${conf.realMag} 등급 (겉보기)`;
+                    dragSubtag.textContent = `겉보기: ${conf.realMag} 등급`;
+                } else {
+                    currentPosStatus.textContent = '이동 중...';
+                    currentPosStatus.className = 'font-bold text-slate-400';
+                    dragSubtag.textContent = '드래그하여 10pc에 맞춰보세요';
+                }
+                target10pcMarker.setAttribute('stroke', '#facc15');
+                target10pcMarker.setAttribute('stroke-width', '2');
+            }
+        }
 
         function selectStar(star) {
             currentStar = star;
+            const conf = starConfig[star];
             const btnSirius = document.getElementById('btn-sirius');
             const btnBetel = document.getElementById('btn-betelgeuse');
 
             if (star === 'sirius') {
                 btnSirius.className = 'px-4 py-2 rounded-xl text-xs font-bold transition bg-cyan-600 text-white shadow-lg';
                 btnBetel.className = 'px-4 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white';
-                groupSirius.classList.remove('hidden');
-                groupBetel.classList.add('hidden');
-
                 starStatusPill.className = 'inline-block px-2.5 py-1 rounded-lg text-xs font-bold mb-2 bg-blue-500/10 text-blue-400 border border-blue-500/20';
                 starStatusPill.textContent = '10 pc보다 가까운 별 (거리 약 2.6 pc)';
                 starDetailTitle.textContent = '시리우스 (밤하늘에서 가장 밝은 별)';
-                starDetailDesc.innerHTML = '시리우스는 실제 지구와 매우 가까워 눈에는 엄청 밝게(-1.5등급) 보입니다. 하지만 기준 거리인 <strong>10 pc로 멀리 보내면 어두워져서 절대 등급이 +1.4등급</strong>으로 커집니다.';
-                displayAppMag.textContent = '-1.5 등급';
-                displayAbsMag.textContent = '+1.4 등급';
-                displayDistMod.textContent = '-2.9 (음수: 10 pc보다 가까움)';
             } else {
                 btnBetel.className = 'px-4 py-2 rounded-xl text-xs font-bold transition bg-red-600 text-white shadow-lg';
                 btnSirius.className = 'px-4 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white';
-                groupBetel.classList.remove('hidden');
-                groupSirius.classList.add('hidden');
-
                 starStatusPill.className = 'inline-block px-2.5 py-1 rounded-lg text-xs font-bold mb-2 bg-red-500/10 text-red-400 border border-red-500/20';
                 starStatusPill.textContent = '10 pc보다 훨씬 먼 별 (거리 약 168 pc)';
                 starDetailTitle.textContent = '베텔게우스 (오리온자리의 붉은 초거성)';
-                starDetailDesc.innerHTML = '베텔게우스는 실제 엄청 멀리 있어서 눈에는 0.6등급으로 보이지만, 만약 <strong>10 pc 거리로 앞으로 당겨오면 무려 -5.9등급</strong>으로 금성보다 수십 배나 밝게 빛나는 괴물별입니다!';
-                displayAppMag.textContent = '+0.6 등급';
-                displayAbsMag.textContent = '-5.9 등급';
-                displayDistMod.textContent = '+6.5 (양수: 10 pc보다 훨씬 멂)';
             }
-            toggleStarDistance('real');
+
+            starDetailDesc.innerHTML = conf.desc;
+            displayAbsMag.textContent = `${conf.absMag > 0 ? '+' : ''}${conf.absMag} 등급`;
+            dragGlow.setAttribute('fill', conf.glow);
+            dragCore.setAttribute('fill', conf.coreColor);
+
+            const endX = earthX + 370 * Math.cos(conf.angle);
+            const endY = earthY + 370 * Math.sin(conf.angle);
+            guideLine.setAttribute('x2', endX);
+            guideLine.setAttribute('y2', endY);
+
+            const m10X = earthX + R_10PC * Math.cos(conf.angle);
+            const m10Y = earthY + R_10PC * Math.sin(conf.angle);
+            target10pcMarker.setAttribute('cx', m10X);
+            target10pcMarker.setAttribute('cy', m10Y);
+            target10pcText.setAttribute('x', m10X + (star === 'sirius' ? 0 : 25));
+            target10pcText.setAttribute('y', m10Y - 15);
+
+            const mRealX = earthX + conf.realR * Math.cos(conf.angle);
+            const mRealY = earthY + conf.realR * Math.sin(conf.angle);
+            realPosMarker.setAttribute('cx', mRealX);
+            realPosMarker.setAttribute('cy', mRealY);
+            realPosText.setAttribute('x', mRealX - 25);
+            realPosText.setAttribute('y', mRealY + 5);
+            realPosText.textContent = `실제 위치 (${conf.realDistPc} pc)`;
+
+            updateStarPosition(conf.realR);
         }
 
-        function toggleStarDistance(pos) {
-            currentPosition = pos;
-            if (pos === 'real') {
-                posBtnReal.className = 'px-3.5 py-1.5 bg-slate-800 text-cyan-300 border border-cyan-500 rounded-xl text-xs font-bold transition';
-                posBtn10pc.className = 'px-3.5 py-1.5 bg-slate-900 text-slate-400 border border-slate-700 rounded-xl text-xs font-bold transition hover:text-white';
-
-                // 시리우스 실제 위치 복귀 (2.6pc: x=220, y=220)
-                starObjSirius.setAttribute('transform', 'translate(220, 220)');
-                siriusCore.setAttribute('r', '14');
-                siriusTag.textContent = '겉보기: -1.5 등급 (크고 밝음)';
-
-                // 베텔게우스 실제 위치 복귀 (먼 곳: x=560, y=90)
-                starObjBetel.setAttribute('transform', 'translate(560, 90)');
-                betelCore.setAttribute('r', '10');
-                betelGlowCircle.setAttribute('r', '22');
-                betelTag.textContent = '겉보기: 0.6 등급';
+        function snapToPosition(type) {
+            const conf = starConfig[currentStar];
+            if (type === 'real') {
+                updateStarPosition(conf.realR);
             } else {
-                posBtn10pc.className = 'px-3.5 py-1.5 bg-slate-800 text-amber-300 border border-amber-500 rounded-xl text-xs font-bold transition';
-                posBtnReal.className = 'px-3.5 py-1.5 bg-slate-900 text-slate-400 border border-slate-700 rounded-xl text-xs font-bold transition hover:text-white';
-
-                // 시리우스 10pc 가상 위치로 이동 (x=220, y=80) -> 멀어져서 작아지고 어두워짐
-                starObjSirius.setAttribute('transform', 'translate(220, 80)');
-                siriusCore.setAttribute('r', '7');
-                siriusTag.textContent = '절대 등급: +1.4 등급 (어두워짐!)';
-
-                // 베텔게우스 10pc 가상 위치로 당겨옴 (x=370, y=210) -> 가까워져서 거대하고 눈부셔짐
-                starObjBetel.setAttribute('transform', 'translate(370, 210)');
-                betelCore.setAttribute('r', '22');
-                betelGlowCircle.setAttribute('r', '45');
-                betelTag.textContent = '절대 등급: -5.9 등급 (압도적으로 밝아짐!)';
+                updateStarPosition(R_10PC, true);
             }
         }
+
+        // 슬라이더 바 수동 조작
+        starDistSlider.addEventListener('input', (e) => {
+            updateStarPosition(parseFloat(e.target.value));
+        });
+
+        // 마우스 & 터치 드래그 엔진
+        function getSvgPoint(evt) {
+            const rect = universeSvg.getBoundingClientRect();
+            const clientX = evt.clientX || (evt.touches && evt.touches[0].clientX);
+            const clientY = evt.clientY || (evt.touches && evt.touches[0].clientY);
+            const scaleX = 650 / rect.width;
+            const scaleY = 380 / rect.height;
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
+            };
+        }
+
+        function startDrag(e) {
+            isDragging = true;
+            if (e.cancelable) e.preventDefault();
+        }
+
+        function doDrag(e) {
+            if (!isDragging) return;
+            const pt = getSvgPoint(e);
+            const conf = starConfig[currentStar];
+            const dx = pt.x - earthX;
+            const dy = pt.y - earthY;
+            const projectedR = dx * Math.cos(conf.angle) + dy * Math.sin(conf.angle);
+            const clampedR = Math.max(60, Math.min(350, projectedR));
+            updateStarPosition(clampedR);
+        }
+
+        function endDrag() {
+            isDragging = false;
+        }
+
+        draggableStar.addEventListener('mousedown', startDrag);
+        draggableStar.addEventListener('touchstart', startDrag, { passive: false });
+        window.addEventListener('mousemove', doDrag);
+        window.addEventListener('touchmove', doDrag, { passive: true });
+        window.addEventListener('mouseup', endDrag);
+        window.addEventListener('touchend', endDrag);
 
         /* ==========================================================
-           3. 친구와 함께 푸는 랜덤 협동 퀴즈 시스템 (6문항 중 2개 랜덤 노출)
+           3. 친구와 함께 푸는 랜덤 협동 퀴즈
         ========================================================== */
         const quizBank = [
             {
@@ -481,18 +587,15 @@
                         <h4 class="font-bold text-white text-sm md:text-base leading-snug">${item.q}</h4>
                     </div>
 
-                    <!-- 보기 목록 -->
                     <div class="space-y-2">
                         ${item.options.map((opt, optIdx) => `
                             <button onclick="checkAnswer(${qIdx}, ${optIdx},${item.answer}, this)" 
                                     class="quiz-opt-btn-${qIdx} w-full text-left px-4 py-2.5 bg-slate-900 hover:bg-slate-800 text-xs text-slate-300 rounded-xl border border-slate-800 transition flex items-center justify-between">
                                 <span>${optIdx + 1}.${opt}</span>
-                                <i class="fas fa-check-circle opacity-0"></i>
                             </button>
                         `).join('')}
                     </div>
 
-                    <!-- 해설 피드백 박스 -->
                     <div id="quiz-feedback-${qIdx}" class="hidden p-3.5 rounded-xl text-xs leading-relaxed"></div>
                 </div>
             `).join('');
@@ -501,12 +604,12 @@
         window.checkAnswer = function(qIdx, selectedOpt, correctOpt, btn) {
             const allBtns = document.querySelectorAll(`.quiz-opt-btn-${qIdx}`);
             const feedback = document.getElementById(`quiz-feedback-${qIdx}`);
-            allBtns.forEach(b => b.classList.add('pointer-events-none')); // 다중 클릭 방지
+            allBtns.forEach(b => b.classList.add('pointer-events-none'));
 
             if (selectedOpt === correctOpt) {
                 btn.classList.add('bg-emerald-950', 'border-emerald-500', 'text-emerald-300');
                 feedback.className = 'p-3.5 rounded-xl text-xs leading-relaxed bg-emerald-950/60 border border-emerald-800 text-emerald-300 block';
-                feedback.innerHTML = `<strong>🎉 정답입니다!</strong> 친구와 정확히 협의했네요. <br>${quizBank.find(item => item.options[correctOpt] === btn.innerText.split('. ')[1]).explain}`;
+                feedback.innerHTML = `<strong>🎉 정답입니다!</strong> 친구와 잘 협의했네요. <br>${quizBank.find(item => item.options[correctOpt] === btn.innerText.split('. ')[1]).explain}`;
             } else {
                 btn.classList.add('bg-rose-950', 'border-rose-500', 'text-rose-300');
                 allBtns[correctOpt].classList.add('bg-emerald-950/50', 'border-emerald-500/50', 'text-emerald-300');
@@ -515,66 +618,10 @@
             }
         };
 
-        // 초기화 로드
+        // 최초 실행
         updateGradeLab(1);
+        selectStar('sirius');
         renderRandomQuizzes();
-      // ==========================================================
-        // 드래그 & 터치 이동 엔진 (SVG 10pc 연동)
-        // ==========================================================
-        const starDragTarget = document.getElementById('draggable-star');
-        const svgCanvas = document.getElementById('universe-svg');
-        let isStarDragging = false;
-
-        function getCanvasCoordinates(evt) {
-            const rect = svgCanvas.getBoundingClientRect();
-            const clientX = evt.clientX || (evt.touches && evt.touches[0].clientX);
-            const clientY = evt.clientY || (evt.touches && evt.touches[0].clientY);
-            const scaleX = 650 / rect.width;
-            const scaleY = 400 / rect.height;
-
-            return {
-                x: (clientX - rect.left) * scaleX,
-                y: (clientY - rect.top) * scaleY
-            };
-        }
-
-        function startStarDrag(e) {
-            isStarDragging = true;
-            if (starDragTarget) starDragTarget.style.cursor = 'grabbing';
-            if (e.cancelable) e.preventDefault();
-        }
-
-        function moveStarDrag(e) {
-            if (!isStarDragging) return;
-            const pt = getCanvasCoordinates(e);
-            const conf = starConfig[currentStar];
-
-            const dx = pt.x - earthX;
-            const dy = pt.y - earthY;
-            const projectedR = dx * Math.cos(conf.angle) + dy * Math.sin(conf.angle);
-
-            // 이동 범위 제한 (60px ~ 360px)
-            const clampedR = Math.max(60, Math.min(360, projectedR));
-            updateStarPosition(clampedR);
-        }
-
-        function stopStarDrag() {
-            if (isStarDragging) {
-                isStarDragging = false;
-                if (starDragTarget) starDragTarget.style.cursor = 'grab';
-            }
-        }
-
-        if (starDragTarget) {
-            starDragTarget.addEventListener('pointerdown', startStarDrag);
-            starDragTarget.addEventListener('touchstart', startStarDrag, { passive: false });
-        }
-
-        window.addEventListener('pointermove', moveStarDrag);
-        window.addEventListener('touchmove', moveStarDrag, { passive: true });
-        window.addEventListener('pointerup', stopStarDrag);
-        window.addEventListener('pointercancel', stopStarDrag);
-        window.addEventListener('touchend', stopStarDrag);  
     </script>
 </body>
 </html>
