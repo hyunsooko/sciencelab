@@ -121,8 +121,8 @@
             </div>
         </section>
 
-        <!-- =========================================================
-             [Step 2 - 신규 삽입] 거리에 따른 별의 밝기 변화 (역제곱 법칙)
+      <!-- =========================================================
+             [Step 2] 거리에 따른 별의 밝기 변화 (전구 개수 실시간 연동)
         ========================================================= -->
         <section class="glass-panel p-6 md:p-8 rounded-3xl space-y-6 border border-emerald-500/30">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -132,22 +132,21 @@
                         <h2 class="text-xl font-bold text-emerald-400">거리에 따른 별의 밝기 변화 (빛의 확산 원리)</h2>
                     </div>
                     <p class="text-sm text-slate-400 mt-1">
-                        광원에서 나온 일정한 빛은 <strong>거리의 제곱에 비례하여 넓은 면적으로 퍼집니다.</strong> 따라서 단위 면적당 밝기는 <strong>거리의 제곱에 반비례</strong>합니다.
+                        전구에서 나온 36개의 빛이 거리에 따라 퍼집니다. <strong>기준 1칸에 들어오는 실제 전구 개수</strong>를 버튼을 눌러 확인해 보세요.
                     </p>
                 </div>
-                <!-- 거리 배수 선택 버튼 (1배, 2배, 3배) -->
-                <div class="flex bg-slate-900 p-1.5 rounded-2xl border border-slate-800 shrink-0 gap-1">
-                    <button onclick="setInverseSquareDist(1)" id="isq-btn-1" class="px-4 py-2 rounded-xl text-xs font-bold transition bg-emerald-600 text-white shadow-lg">거리 1배 (기준)</button>
-                    <button onclick="setInverseSquareDist(2)" id="isq-btn-2" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white">거리 2배</button>
-                    <button onclick="setInverseSquareDist(3)" id="isq-btn-3" class="px-4 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white">거리 3배</button>
+                <!-- 상단 거리 선택 버튼 -->
+                <div class="flex bg-slate-900 p-1.5 rounded-2xl border border-slate-800 shrink-0 gap-1.5">
+                    <button type="button" onclick="changeDistStep(1)" id="isq-btn-1" class="isq-nav-btn px-4 py-2 rounded-xl text-xs font-bold transition bg-emerald-600 text-white shadow-lg">거리 1배 (기준)</button>
+                    <button type="button" onclick="changeDistStep(2)" id="isq-btn-2" class="isq-nav-btn px-4 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white">거리 2배</button>
+                    <button type="button" onclick="changeDistStep(3)" id="isq-btn-3" class="isq-nav-btn px-4 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white">거리 3배</button>
                 </div>
             </div>
 
-            <!-- 교과서 삽화 인터랙티브 SVG 다이어그램 -->
-            <div class="bg-slate-950 p-4 md:p-6 rounded-2xl border border-slate-800 relative overflow-hidden">
-                <svg id="inverse-square-svg" class="w-full h-[320px]" viewBox="0 0 760 320">
+            <!-- 메인 다이어그램 SVG (전구 시각화 포함) -->
+            <div class="bg-slate-950 p-4 md:p-6 rounded-2xl border border-slate-800 relative overflow-hidden select-none">
+                <svg id="inverse-square-svg" class="w-full h-[340px]" viewBox="0 0 760 340">
                     <defs>
-                        <!-- 광원 빛 그라데이션 -->
                         <radialGradient id="bulb-glow-src" cx="50%" cy="50%" r="50%">
                             <stop offset="0%" stop-color="#fef08a" />
                             <stop offset="60%" stop-color="#eab308" />
@@ -155,117 +154,230 @@
                         </radialGradient>
                     </defs>
 
-                    <!-- 빛의 원뿔 확산 점선 (광원(40, 260) -> 3배 스크린) -->
-                    <line x1="40" y1="260" x2="680" y2="40" stroke="rgba(250, 204, 21, 0.45)" stroke-width="1.5" stroke-dasharray="4 4" />
-                    <line x1="40" y1="260" x2="680" y2="280" stroke="rgba(250, 204, 21, 0.45)" stroke-width="1.5" stroke-dasharray="4 4" />
-                    <line x1="40" y1="260" x2="680" y2="120" stroke="rgba(255, 255, 255, 0.2)" stroke-width="1" stroke-dasharray="2 2" />
+                    <!-- 확산 가이드선 -->
+                    <line x1="50" y1="260" x2="680" y2="40" stroke="rgba(250, 204, 21, 0.4)" stroke-width="1.5" stroke-dasharray="4 4" />
+                    <line x1="50" y1="260" x2="680" y2="280" stroke="rgba(250, 204, 21, 0.4)" stroke-width="1.5" stroke-dasharray="4 4" />
 
-                    <!-- 상단 거리 측정선 화살표 -->
-                    <!-- 1배 -->
-                    <line x1="40" y1="20" x2="240" y2="20" stroke="#38bdf8" stroke-width="1.5" />
-                    <line x1="40" y1="12" x2="40" y2="28" stroke="#38bdf8" stroke-width="1.5" />
-                    <line x1="240" y1="12" x2="240" y2="28" stroke="#38bdf8" stroke-width="1.5" />
-                    <text x="140" y="16" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">1배</text>
+                    <!-- 상단 거리 라벨 -->
+                    <line x1="50" y1="22" x2="240" y2="22" stroke="#38bdf8" stroke-width="2" />
+                    <text x="145" y="17" fill="#38bdf8" font-size="11" font-weight="bold" text-anchor="middle">1배</text>
+                    <line x1="50" y1="38" x2="440" y2="38" stroke="#a78bfa" stroke-width="2" />
+                    <text x="340" y="33" fill="#a78bfa" font-size="11" font-weight="bold" text-anchor="middle">2배</text>
+                    <line x1="50" y1="54" x2="660" y2="54" stroke="#34d399" stroke-width="2" />
+                    <text x="550" y="49" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle">3배</text>
 
-                    <!-- 2배 -->
-                    <line x1="40" y1="36" x2="440" y2="36" stroke="#a78bfa" stroke-width="1.5" />
-                    <line x1="440" y1="28" x2="440" y2="44" stroke="#a78bfa" stroke-width="1.5" />
-                    <text x="340" y="32" fill="#a78bfa" font-size="11" font-weight="bold" text-anchor="middle">2배</text>
-
-                    <!-- 3배 -->
-                    <line x1="40" y1="52" x2="660" y2="52" stroke="#34d399" stroke-width="1.5" />
-                    <line x1="660" y1="44" x2="660" y2="60" stroke="#34d399" stroke-width="1.5" />
-                    <text x="550" y="48" fill="#34d399" font-size="11" font-weight="bold" text-anchor="middle">3배</text>
-
-                    <!-- 광원 (전구: 총 36개 빛 방출 기준) -->
-                    <g transform="translate(40, 260)">
-                        <circle cx="0" cy="0" r="28" fill="url(#bulb-glow-src)" opacity="0.6" class="animate-pulse" />
-                        <circle cx="0" cy="0" r="12" fill="#facc15" stroke="#ffffff" stroke-width="2" />
-                        <text x="0" y="4" font-size="9" fill="#000" font-weight="extrabold" text-anchor="middle">전구</text>
-                        <rect x="-35" y="-55" width="70" height="24" rx="6" fill="#1e293b" stroke="#facc15" stroke-width="1" />
-                        <text x="0" y="-39" font-size="10" fill="#fef08a" font-weight="extrabold" text-anchor="middle">총 36개 빛</text>
+                    <!-- 광원 (전구: 총 36개 빛) -->
+                    <g transform="translate(50, 260)">
+                        <circle cx="0" cy="0" r="30" fill="url(#bulb-glow-src)" opacity="0.6" class="animate-pulse" />
+                        <circle cx="0" cy="0" r="14" fill="#facc15" stroke="#ffffff" stroke-width="2" />
+                        <text x="0" y="4" font-size="10" fill="#000" font-weight="extrabold" text-anchor="middle">전구</text>
+                        <rect x="-42" y="-56" width="84" height="24" rx="6" fill="#1e293b" stroke="#facc15" stroke-width="1.5" />
+                        <text x="0" y="-40" font-size="10" fill="#fef08a" font-weight="bold" text-anchor="middle">총 36개 빛</text>
                     </g>
 
-                    <!-- [스크린 1: 거리 1배] (x=240, 1칸 스크린) -->
-                    <g id="screen-group-1" class="transition-opacity duration-300">
-                        <line x1="240" y1="20" x2="240" y2="280" stroke="rgba(56, 189, 248, 0.3)" stroke-dasharray="2 2" />
-                        <!-- 면적 1칸 (너비 40, 높이 50) -->
-                        <rect id="screen-rect-1" x="220" y="200" width="40" height="50" rx="4" fill="#fbbf24" stroke="#f59e0b" stroke-width="2" />
-                        <text x="240" y="230" font-size="12" fill="#0f172a" font-weight="black" text-anchor="middle">1칸</text>
+                    <!-- [스크린 1: 거리 1배] -->
+                    <g id="screen-group-1" class="cursor-pointer transition-all duration-300" onclick="changeDistStep(1)">
+                        <line x1="240" y1="22" x2="240" y2="280" stroke="rgba(56, 189, 248, 0.4)" stroke-dasharray="2 2" />
+                        <rect id="screen-bg-1" x="220" y="200" width="40" height="50" rx="4" fill="#fbbf24" stroke="#38bdf8" stroke-width="3" />
+                        <text x="240" y="220" font-size="10" fill="#0f172a" font-weight="black" text-anchor="middle">기준 1칸</text>
+                        <text x="240" y="238" font-size="11" fill="#78350f" font-weight="black" text-anchor="middle">💡×36</text>
                         <!-- 하단 라벨 -->
-                        <rect x="200" y="260" width="80" height="36" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1" />
-                        <text x="240" y="275" font-size="10" fill="#94a3b8" text-anchor="middle">면적: 1배 (1칸)</text>
-                        <text x="240" y="289" font-size="11" fill="#38bdf8" font-weight="bold" text-anchor="middle">밝기: 1배 (36개)</text>
+                        <rect id="screen-box-1" x="195" y="260" width="90" height="38" rx="8" fill="#0f172a" stroke="#38bdf8" stroke-width="1.5" />
+                        <text x="240" y="275" font-size="10" fill="#94a3b8" text-anchor="middle">면적: 1칸</text>
+                        <text x="240" y="291" font-size="11" fill="#38bdf8" font-weight="bold" text-anchor="middle">밝기: 1배 (36개)</text>
                     </g>
 
-                    <!-- [스크린 2: 거리 2배] (x=440, 2x2 = 4칸 스크린) -->
-                    <g id="screen-group-2" class="transition-opacity duration-300 opacity-60">
-                        <line x1="440" y1="36" x2="440" y2="280" stroke="rgba(167, 139, 250, 0.3)" stroke-dasharray="2 2" />
-                        <!-- 면적 4칸 (너비 80, 높이 100) -->
+                    <!-- [스크린 2: 거리 2배] -->
+                    <g id="screen-group-2" class="cursor-pointer transition-all duration-300 opacity-60" onclick="changeDistStep(2)">
+                        <line x1="440" y1="38" x2="440" y2="280" stroke="rgba(167, 139, 250, 0.4)" stroke-dasharray="2 2" />
                         <g transform="translate(400, 140)">
-                            <rect x="0" y="0" width="80" height="100" rx="4" fill="#ca8a04" opacity="0.85" stroke="#a78bfa" stroke-width="2" />
-                            <!-- 2x2 분할선 -->
-                            <line x1="40" y1="0" x2="40" y2="100" stroke="#fef08a" stroke-width="1.5" />
-                            <line x1="0" y1="50" x2="80" y2="50" stroke="#fef08a" stroke-width="1.5" />
-                            <!-- 기준 1칸 하이라이트 -->
-                            <rect x="0" y="50" width="40" height="50" fill="#f43f5e" opacity="0.65" stroke="#fda4af" stroke-width="2" />
-                            <text x="20" y="80" font-size="10" fill="#fff" font-weight="extrabold" text-anchor="middle">1칸</text>
-                            <text x="60" y="28" font-size="11" fill="#fef08a" font-weight="bold" text-anchor="middle">4칸</text>
+                            <rect x="0" y="0" width="80" height="100" rx="4" fill="#78350f" opacity="0.9" stroke="#a78bfa" stroke-width="2" />
+                            <line x1="40" y1="0" x2="40" y2="100" stroke="#fef08a" stroke-width="1" />
+                            <line x1="0" y1="50" x2="80" y2="50" stroke="#fef08a" stroke-width="1" />
+                            <!-- 기준 1칸 -->
+                            <rect id="screen-bg-2" x="0" y="50" width="40" height="50" fill="#fbbf24" stroke="#f43f5e" stroke-width="2" />
+                            <text x="20" y="70" font-size="9" fill="#0f172a" font-weight="black" text-anchor="middle">기준 1칸</text>
+                            <text x="20" y="87" font-size="11" fill="#78350f" font-weight="black" text-anchor="middle">💡×9</text>
+                            <text x="60" y="30" font-size="11" fill="#fef08a" font-weight="bold" text-anchor="middle">총 4칸</text>
                         </g>
                         <!-- 하단 라벨 -->
-                        <rect x="390" y="260" width="100" height="36" rx="8" fill="#0f172a" stroke="#a78bfa" stroke-width="1" />
-                        <text x="440" y="275" font-size="10" fill="#94a3b8" text-anchor="middle">면적: 4배 (2²칸)</text>
-                        <text x="440" y="289" font-size="11" fill="#a78bfa" font-weight="bold" text-anchor="middle">밝기: 1/4배 (9개)</text>
+                        <rect id="screen-box-2" x="390" y="260" width="100" height="38" rx="8" fill="#0f172a" stroke="#a78bfa" stroke-width="1" />
+                        <text x="440" y="275" font-size="10" fill="#94a3b8" text-anchor="middle">면적: 4칸 (2²)</text>
+                        <text x="440" y="291" font-size="11" fill="#a78bfa" font-weight="bold" text-anchor="middle">밝기: 1/4배 (9개)</text>
                     </g>
 
-                    <!-- [스크린 3: 거리 3배] (x=660, 3x3 = 9칸 스크린) -->
-                    <g id="screen-group-3" class="transition-opacity duration-300 opacity-60">
-                        <line x1="660" y1="52" x2="660" y2="280" stroke="rgba(52, 211, 153, 0.3)" stroke-dasharray="2 2" />
-                        <!-- 면적 9칸 (너비 120, 높이 150) -->
+                    <!-- [스크린 3: 거리 3배] -->
+                    <g id="screen-group-3" class="cursor-pointer transition-all duration-300 opacity-60" onclick="changeDistStep(3)">
+                        <line x1="660" y1="54" x2="660" y2="280" stroke="rgba(52, 211, 153, 0.4)" stroke-dasharray="2 2" />
                         <g transform="translate(600, 80)">
-                            <rect x="0" y="0" width="120" height="150" rx="4" fill="#854d0e" opacity="0.85" stroke="#34d399" stroke-width="2" />
-                            <!-- 3x3 분할선 -->
+                            <rect x="0" y="0" width="120" height="150" rx="4" fill="#451a03" opacity="0.9" stroke="#34d399" stroke-width="2" />
                             <line x1="40" y1="0" x2="40" y2="150" stroke="#fef08a" stroke-width="1" />
                             <line x1="80" y1="0" x2="80" y2="150" stroke="#fef08a" stroke-width="1" />
                             <line x1="0" y1="50" x2="120" y2="50" stroke="#fef08a" stroke-width="1" />
                             <line x1="0" y1="100" x2="120" y2="100" stroke="#fef08a" stroke-width="1" />
-                            <!-- 기준 1칸 하이라이트 -->
-                            <rect x="0" y="100" width="40" height="50" fill="#f43f5e" opacity="0.65" stroke="#fda4af" stroke-width="2" />
-                            <text x="20" y="130" font-size="10" fill="#fff" font-weight="extrabold" text-anchor="middle">1칸</text>
-                            <text x="80" y="45" font-size="12" fill="#fef08a" font-weight="bold" text-anchor="middle">9칸</text>
+                            <!-- 기준 1칸 -->
+                            <rect id="screen-bg-3" x="0" y="100" width="40" height="50" fill="#fbbf24" stroke="#f43f5e" stroke-width="2" />
+                            <text x="20" y="120" font-size="9" fill="#0f172a" font-weight="black" text-anchor="middle">기준 1칸</text>
+                            <text x="20" y="137" font-size="11" fill="#78350f" font-weight="black" text-anchor="middle">💡×4</text>
+                            <text x="80" y="45" font-size="11" fill="#fef08a" font-weight="bold" text-anchor="middle">총 9칸</text>
                         </g>
                         <!-- 하단 라벨 -->
-                        <rect x="610" y="260" width="100" height="36" rx="8" fill="#0f172a" stroke="#34d399" stroke-width="1" />
-                        <text x="660" y="275" font-size="10" fill="#94a3b8" text-anchor="middle">면적: 9배 (3²칸)</text>
-                        <text x="660" y="289" font-size="11" fill="#34d399" font-weight="bold" text-anchor="middle">밝기: 1/9배 (4개)</text>
+                        <rect id="screen-box-3" x="610" y="260" width="100" height="38" rx="8" fill="#0f172a" stroke="#34d399" stroke-width="1" />
+                        <text x="660" y="275" font-size="10" fill="#94a3b8" text-anchor="middle">면적: 9칸 (3²)</text>
+                        <text x="660" y="291" font-size="11" fill="#34d399" font-weight="bold" text-anchor="middle">밝기: 1/9배 (4개)</text>
                     </g>
                 </svg>
             </div>
 
-            <!-- 단위 면적(1칸)당 빛 개수 실시간 비교 보드 -->
+            <!-- 기준 1칸에 들어오는 실제 전구 아이콘 보드 -->
+            <div class="bg-slate-900/90 p-5 rounded-2xl border border-slate-800 space-y-4">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-2 border-b border-slate-800 pb-3">
+                    <div class="flex items-center gap-2">
+                        <span class="text-amber-400 text-lg">💡</span>
+                        <h4 id="step2-title-text" class="text-sm md:text-base font-bold text-white">
+                            [거리 1배] 기준 1칸에 비추는 전구 개수
+                        </h4>
+                    </div>
+                    <span id="step2-badge-text" class="px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 text-emerald-400 text-xs font-bold rounded-lg font-mono">
+                        전구 36개 (밝기 1배)
+                    </span>
+                </div>
+
+                <div class="flex flex-col md:flex-row items-center gap-6">
+                    <!-- 전구들이 콕콕 박히는 전광판 -->
+                    <div id="step2-bulb-display" class="w-full md:w-2/3 p-4 bg-slate-950 rounded-xl border border-slate-800 min-h-[100px] flex flex-wrap items-center justify-center gap-2">
+                        <!-- JS가 전구들을 채웁니다 -->
+                    </div>
+                    <!-- 요약 지표 -->
+                    <div class="w-full md:w-1/3 bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-2 text-xs font-mono">
+                        <div class="flex justify-between text-slate-300">
+                            <span>빛이 퍼진 면적:</span>
+                            <span id="step2-area-val" class="font-bold text-cyan-400">1칸 (1²배)</span>
+                        </div>
+                        <div class="flex justify-between text-slate-300">
+                            <span>기준 1칸당 전구 수:</span>
+                            <span id="step2-count-val" class="font-bold text-amber-400">36개 (전부)</span>
+                        </div>
+                        <div class="border-t border-slate-800 pt-2 flex justify-between">
+                            <span class="text-emerald-400 font-bold">단위 면적당 밝기:</span>
+                            <span id="step2-ratio-val" class="font-bold text-emerald-400">1 / 1² = 1배</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 하단 3단 카드 -->
             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div id="card-isq-1" class="p-4 rounded-xl border border-emerald-500 bg-emerald-950/20 text-center space-y-1 transition">
+                <div onclick="changeDistStep(1)" id="step2-card-1" class="cursor-pointer p-4 rounded-xl border border-emerald-500 bg-emerald-950/30 text-center space-y-1 transition ring-2 ring-emerald-500/50">
                     <span class="text-xs text-slate-400 font-bold">거리 1배 위치</span>
                     <div class="text-2xl font-black text-emerald-400">빛 36개 (전부)</div>
-                    <p class="text-xs text-slate-400">면적: 1칸 | 상대 밝기: <strong>1배 (1/1²)</strong></p>
+                    <p class="text-xs text-slate-400">면적 1칸 | 상대 밝기: <strong>1배 (1/1²)</strong></p>
                 </div>
-                <div id="card-isq-2" class="p-4 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition">
+                <div onclick="changeDistStep(2)" id="step2-card-2" class="cursor-pointer p-4 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition hover:border-slate-700">
                     <span class="text-xs text-slate-400 font-bold">거리 2배 위치</span>
                     <div class="text-2xl font-black text-purple-400">1칸당 9개</div>
-                    <p class="text-xs text-slate-400">면적: 4칸으로 분산 | 상대 밝기: <strong>1/4배 (1/2²)</strong></p>
+                    <p class="text-xs text-slate-400">면적 4칸 분산 | 상대 밝기: <strong>1/4배 (1/2²)</strong></p>
                 </div>
-                <div id="card-isq-3" class="p-4 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition">
+                <div onclick="changeDistStep(3)" id="step2-card-3" class="cursor-pointer p-4 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition hover:border-slate-700">
                     <span class="text-xs text-slate-400 font-bold">거리 3배 위치</span>
                     <div class="text-2xl font-black text-cyan-400">1칸당 4개</div>
-                    <p class="text-xs text-slate-400">면적: 9칸으로 분산 | 상대 밝기: <strong>1/9배 (1/3²)</strong></p>
+                    <p class="text-xs text-slate-400">면적 9칸 분산 | 상대 밝기: <strong>1/9배 (1/3²)</strong></p>
                 </div>
             </div>
             
-            <div class="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 text-xs text-slate-300 text-center">
-                ✨ <strong>결론 도출:</strong> 별이 멀어지면 빛이 더 넓은 면적으로 흩어지므로, <strong>거리가 $r$배 되면 밝기는 $1/r^2$배로 어두워집니다!</strong>
+            <div class="bg-slate-900/60 p-3.5 rounded-xl border border-slate-800 text-xs text-slate-300 text-center">
+                ✨ <strong>교과서 결론:</strong> 빛의 양(36개)은 일정한데 거리가 멀어지면 면적이 제곱($1 \rightarrow 4 \rightarrow 9$)으로 넓어지므로, <strong>단위 면적당 밝기는 $1 \rightarrow \frac{1}{4} \rightarrow \frac{1}{9}$로 줄어듭니다!</strong>
             </div>
-        </section>
 
+            <!-- Step 2 전용 실행 스크립트 -->
+            <script>
+                const step2Config = {
+                    1: {
+                        title: "[거리 1배] 기준 1칸에 비추는 전구 개수",
+                        badge: "전구 36개 (밝기 1배)",
+                        area: "1칸 (1²배)",
+                        countText: "36개 (전부 집중)",
+                        ratio: "1 / 1² = 1배 (기준 밝기)",
+                        count: 36,
+                        btnClass: "bg-emerald-600 text-white shadow-lg",
+                        cardClass: "border-emerald-500 bg-emerald-950/30 ring-2 ring-emerald-500/50"
+                    },
+                    2: {
+                        title: "[거리 2배] 기준 1칸에 비추는 전구 개수 (면적이 4칸으로 분산)",
+                        badge: "기준 1칸당 전구 9개 (밝기 1/4배)",
+                        area: "4칸 (2²배로 분산)",
+                        countText: "36개 ÷ 4칸 = 9개",
+                        ratio: "1 / 2² = 1/4배 (9개)",
+                        count: 9,
+                        btnClass: "bg-purple-600 text-white shadow-lg",
+                        cardClass: "border-purple-500 bg-purple-950/30 ring-2 ring-purple-500/50"
+                    },
+                    3: {
+                        title: "[거리 3배] 기준 1칸에 비추는 전구 개수 (면적이 9칸으로 분산)",
+                        badge: "기준 1칸당 전구 4개 (밝기 1/9배)",
+                        area: "9칸 (3²배로 분산)",
+                        countText: "36개 ÷ 9칸 = 4개",
+                        ratio: "1 / 3² = 1/9배 (4개)",
+                        count: 4,
+                        btnClass: "bg-cyan-600 text-white shadow-lg",
+                        cardClass: "border-cyan-500 bg-cyan-950/30 ring-2 ring-cyan-500/50"
+                    }
+                };
+
+                function changeDistStep(dist) {
+                    const data = step2Config[dist];
+                    if (!data) return;
+
+                    // 1. 상단 버튼 & 스크린 & 하단 카드 하이라이트 동기화
+                    [1, 2, 3].forEach(d => {
+                        const btn = document.getElementById("isq-btn-" + d);
+                        const group = document.getElementById("screen-group-" + d);
+                        const card = document.getElementById("step2-card-" + d);
+
+                        if (d === dist) {
+                            btn.className = "isq-nav-btn px-4 py-2 rounded-xl text-xs font-bold transition " + data.btnClass;
+                            card.className = "cursor-pointer p-4 rounded-xl border text-center space-y-1 transition " + data.cardClass;
+                            if (group) {
+                                group.classList.remove("opacity-60");
+                                group.classList.add("opacity-100");
+                            }
+                        } else {
+                            btn.className = "isq-nav-btn px-4 py-2 rounded-xl text-xs font-bold transition text-slate-400 hover:text-white";
+                            card.className = "cursor-pointer p-4 rounded-xl border border-slate-800 bg-slate-900/60 text-center space-y-1 transition hover:border-slate-700";
+                            if (group) {
+                                group.classList.remove("opacity-100");
+                                group.classList.add("opacity-60");
+                            }
+                        }
+                    });
+
+                    // 2. 텍스트 라벨 업데이트
+                    document.getElementById("step2-title-text").textContent = data.title;
+                    document.getElementById("step2-badge-text").textContent = data.badge;
+                    document.getElementById("step2-area-val").textContent = data.area;
+                    document.getElementById("step2-count-val").textContent = data.countText;
+                    document.getElementById("step2-ratio-val").textContent = data.ratio;
+
+                    // 3. 눈으로 직접 세는 노란 전구(💡) 아이콘 렌더링
+                    const display = document.getElementById("step2-bulb-display");
+                    display.innerHTML = "";
+
+                    // 거리 1배일 때는 36개 아이콘을 빽빽하게, 2배일 때는 9개(3x3), 3배일 때는 4개(2x2) 바둑판 형태로 출력
+                    for (let i = 0; i < data.count; i++) {
+                        const bulbBox = document.createElement("div");
+                        bulbBox.className = "p-1.5 bg-slate-900/90 rounded-lg border border-amber-500/40 flex items-center justify-center transition transform hover:scale-110";
+                        bulbBox.innerHTML = '<i class="fas fa-lightbulb text-amber-400 drop-shadow-[0_0_6px_rgba(251,191,36,0.8)] text-base"></i>';
+                        display.appendChild(bulbBox);
+                    }
+                }
+
+                // 초기 실행
+                document.addEventListener("DOMContentLoaded", () => {
+                    changeDistStep(1);
+                });
+                changeDistStep(1);
+            </script>
+        </section>
         <!-- =========================================================
              [Step 3] 겉보기 등급 vs 절대 등급 구분 (10 pc 기준 드래그)
         ========================================================= -->
